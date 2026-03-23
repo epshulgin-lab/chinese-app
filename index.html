@@ -443,7 +443,7 @@ const radicalsData = [
   {radical:"火 灬",pinyin:"huǒ",meaning:"огонь",examples:[{h:"热",p:"rè",m:"горячий"},{h:"烧",p:"shāo",m:"жечь"},{h:"炒",p:"chǎo",m:"жарить"}],tip:"4 точки снизу или 火 = огонь, жара"},
   {radical:"木",pinyin:"mù",meaning:"дерево",examples:[{h:"树",p:"shù",m:"дерево"},{h:"桌",p:"zhuō",m:"стол"},{h:"椅",p:"yǐ",m:"стул"}],tip:"Крест с корнями = дерево. Всё деревянное"},
   {radical:"手 扌",pinyin:"shǒu",meaning:"рука",examples:[{h:"打",p:"dǎ",m:"бить; делать"},{h:"拿",p:"ná",m:"брать"},{h:"把",p:"bǎ",m:"держать"}],tip:"3 черты слева = рука. Действие руками"},
-  {radical:"心 忄",phonyin:"xīn",meaning:"сердце",examples:[{h:"想",p:"xiǎng",m:"думать"},{h:"感",p:"gǎn",m:"чувствовать"},{h:"忙",p:"máng",m:"занятый"}],tip:"Чувства, эмоции, мысли"},
+  {radical:"心 忄",pinyin:"xīn",meaning:"сердце",examples:[{h:"想",p:"xiǎng",m:"думать"},{h:"感",p:"gǎn",m:"чувствовать"},{h:"忙",p:"máng",m:"занятый"}],tip:"Чувства, эмоции, мысли"},
   {radical:"日",pinyin:"rì",meaning:"солнце; день",examples:[{h:"明",p:"míng",m:"яркий; завтра"},{h:"时",p:"shí",m:"время"},{h:"晚",p:"wǎn",m:"вечер"}],tip:"Квадрат с чертой внутри = солнце"},
   {radical:"月",pinyin:"yuè",meaning:"луна; месяц",examples:[{h:"明",p:"míng",m:"яркий"},{h:"朋",p:"péng",m:"друг"},{h:"期",p:"qī",m:"период"}],tip:"Луна = время, периоды. Тж. мясо в теле"},
   {radical:"金 钅",pinyin:"jīn",meaning:"металл; золото",examples:[{h:"钱",p:"qián",m:"деньги"},{h:"银",p:"yín",m:"серебро"},{h:"铁",p:"tiě",m:"железо"}],tip:"Всё металлическое, деньги"},
@@ -518,6 +518,8 @@ const tabs = [
   ['phrases','Фразы'],
   ['measure','Счётные слова'],
   ['hanzi','汉字 Иероглифы'],
+  ['radicals','Радикалы'],
+  ['reading','Чтение HSK'],
 ];
 
 // ── Helpers ────────────────────────────────────────────────────
@@ -1218,23 +1220,6 @@ const etymologyData = [
   { hanzi:"大", pinyin:"dà", tone:"4", meaning:"Большой", original:"🙆", evolution:"Человек с раскинутыми руками — «вот такой большой!» → 大", mnemonic:"Человек с широко расставленными руками показывает: большо-о-ой! Так и переводится.", compounds:[{w:"太",py:"tài",m:"Слишком = 大большой + точка (ещё больше)"},{w:"天",py:"tiān",m:"Небо = 大человек + горизонталь (над головой)"},{w:"夫",py:"fū",m:"Муж = 大человек + черта (повязка)"}] },
 ];
 
-const radicalsData = [
-  {r:"氵",name:"Вода",meaning:"Жидкость, реки, море",examples:"海(hǎi) море · 河(hé) река · 油(yóu) масло · 泳(yǒng) плавать · 洗(xǐ) мыть"},
-  {r:"木",name:"Дерево",meaning:"Деревья, мебель, материалы",examples:"桌(zhuō) стол · 椅(yǐ) стул · 树(shù) дерево · 桥(qiáo) мост · 板(bǎn) доска"},
-  {r:"口",name:"Рот",meaning:"Речь, еда, отверстия",examples:"吃(chī) есть · 喝(hē) пить · 说(shuō) говорить · 唱(chàng) петь · 问(wèn) спрашивать"},
-  {r:"扌",name:"Рука",meaning:"Действия руками",examples:"打(dǎ) бить · 拿(ná) держать · 找(zhǎo) искать · 推(tuī) толкать · 拉(lā) тянуть"},
-  {r:"忄",name:"Сердце",meaning:"Чувства, эмоции",examples:"忙(máng) занятой · 快(kuài) быстрый · 怕(pà) бояться · 情(qíng) чувство · 愉(yú) радость"},
-  {r:"火",name:"Огонь",meaning:"Тепло, свет, готовка",examples:"烤(kǎo) жарить · 烧(shāo) гореть · 灯(dēng) лампа · 热(rè) горячий · 炒(chǎo) жарить (помешивая)"},
-  {r:"人/亻",name:"Человек",meaning:"Люди, действия людей",examples:"他(tā) он · 你(nǐ) ты · 做(zuò) делать · 住(zhù) жить · 休(xiū) отдыхать"},
-  {r:"女",name:"Женщина",meaning:"Женщины, родство, семья",examples:"妈(mā) мама · 姐(jiě) сестра · 她(tā) она · 好(hǎo) хорошо · 姓(xìng) фамилия"},
-  {r:"言/讠",name:"Слово",meaning:"Речь, язык, общение",examples:"说(shuō) говорить · 请(qǐng) просить · 谢(xiè) благодарить · 话(huà) слова · 语(yǔ) язык"},
-  {r:"日",name:"Солнце",meaning:"Время, свет, дни",examples:"明(míng) яркий · 时(shí) время · 晴(qíng) солнечно · 早(zǎo) рано · 晚(wǎn) поздно"},
-  {r:"月",name:"Луна/Тело",meaning:"Части тела (в этом значении)",examples:"脸(liǎn) лицо · 脚(jiǎo) нога · 肉(ròu) мясо · 胖(pàng) толстый · 腿(tuǐ) нога (бедро)"},
-  {r:"土",name:"Земля",meaning:"Почва, строения",examples:"地(dì) земля · 城(chéng) город · 坐(zuò) сидеть · 块(kuài) кусок · 墙(qiáng) стена"},
-  {r:"金/钅",name:"Металл",meaning:"Металлы, деньги, инструменты",examples:"钱(qián) деньги · 银(yín) серебро · 铁(tiě) железо · 钟(zhōng) часы · 锁(suǒ) замок"},
-  {r:"目",name:"Глаз",meaning:"Зрение, взгляд",examples:"看(kàn) смотреть · 眼(yǎn) глаз · 睡(shuì) спать · 盲(máng) слепой · 督(dū) контролировать"},
-  {r:"草/艹",name:"Трава",meaning:"Растения, природа",examples:"花(huā) цветок · 草(cǎo) трава · 茶(chá) чай · 药(yào) лекарство · 菜(cài) овощ"},
-];
 
 const compoundExamples = [
   { result:"好", pinyin:"hǎo", meaning:"Хорошо; Хороший", parts:[{h:"女",m:"женщина"},{h:"子",m:"ребёнок"}], logic:"Женщина с ребёнком — всё хорошо, семья в сборе" },
@@ -1372,7 +1357,7 @@ function renderRadicals(){
             <div style="font-size:42px;font-weight:900;color:var(--primary);cursor:pointer;min-width:52px;text-align:center" onclick="speakChinese('${esc(r.radical.split(' ')[0])}')">${esc(r.radical)}</div>
             <div>
               <div style="font-weight:800;font-size:15px">${esc(r.meaning)}</div>
-              <div class="pinyin-sm">${esc(r.pinyin||r.phonyin||'')}</div>
+              <div class="pinyin-sm">${esc(r.pinyin||'')}</div>
               <div class="small-muted" style="margin-top:3px">💡 ${esc(r.tip)}</div>
             </div>
           </div>
