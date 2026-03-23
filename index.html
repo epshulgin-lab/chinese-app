@@ -173,6 +173,7 @@
   <section id="grammar" class="tab-pane"></section>
   <section id="phrases" class="tab-pane"></section>
   <section id="measure" class="tab-pane"></section>
+  <section id="hanzi" class="tab-pane"></section>
 </div>
 
 <script>
@@ -278,6 +279,64 @@ const starterWords = [
   {hanzi:"怎么",pinyin:"zěn me",tone:"3-5",translation:"Как; Каким образом",example:"这个汉字怎么读？",examplePinyin:"Zhège Hànzì zěnme dú?",exampleTranslation:"Как читается этот иероглиф?",category:"❓ Вопросы",hsk:1},
   {hanzi:"为什么",pinyin:"wèi shén me",tone:"4-2-5",translation:"Почему",example:"为什么你学习汉语？",examplePinyin:"Wèishénme nǐ xuéxí Hànyǔ?",exampleTranslation:"Почему ты учишь китайский?",category:"❓ Вопросы",hsk:1},
   {hanzi:"多少",pinyin:"duō shǎo",tone:"1-3",translation:"Сколько",example:"这个多少钱？",examplePinyin:"Zhège duōshǎo qián?",exampleTranslation:"Сколько это стоит?",category:"❓ Вопросы",hsk:1},
+
+  // ── ✈️ Аэропорт ───────────────────────────────────────────
+  {hanzi:"机场",pinyin:"jī chǎng",tone:"1-3",translation:"Аэропорт",example:"我明天去机场接客户。",examplePinyin:"Wǒ míngtiān qù jīchǎng jiē kèhù.",exampleTranslation:"Завтра я еду в аэропорт встречать клиента.",category:"✈️ Аэропорт",hsk:2},
+  {hanzi:"航班",pinyin:"háng bān",tone:"2-1",translation:"Рейс; Авиарейс",example:"我的航班是早上八点。",examplePinyin:"Wǒ de hángbān shì zǎoshang bā diǎn.",exampleTranslation:"Мой рейс в восемь утра.",category:"✈️ Аэропорт",hsk:3},
+  {hanzi:"护照",pinyin:"hù zhào",tone:"4-4",translation:"Паспорт",example:"请出示您的护照。",examplePinyin:"Qǐng chūshì nín de hùzhào.",exampleTranslation:"Пожалуйста, предъявите ваш паспорт.",category:"✈️ Аэропорт",hsk:3},
+  {hanzi:"登机牌",pinyin:"dēng jī pái",tone:"1-1-2",translation:"Посадочный талон",example:"请把登机牌给我看一下。",examplePinyin:"Qǐng bǎ dēngjīpái gěi wǒ kàn yīxià.",exampleTranslation:"Пожалуйста, покажите мне посадочный талон.",category:"✈️ Аэропорт",hsk:4},
+  {hanzi:"行李",pinyin:"xíng li",tone:"2-5",translation:"Багаж",example:"我的行李在哪里？",examplePinyin:"Wǒ de xíngli zài nǎlǐ?",exampleTranslation:"Где мой багаж?",category:"✈️ Аэропорт",hsk:3},
+  {hanzi:"安检",pinyin:"ān jiǎn",tone:"1-3",translation:"Досмотр; Контроль безопасности",example:"请把电脑从包里拿出来过安检。",examplePinyin:"Qǐng bǎ diànnǎo cóng bāo lǐ ná chūlái guò ānjiǎn.",exampleTranslation:"Пожалуйста, достаньте ноутбук из сумки для досмотра.",category:"✈️ Аэропорт",hsk:4},
+  {hanzi:"出发",pinyin:"chū fā",tone:"1-1",translation:"Отправляться; Вылетать",example:"飞机几点出发？",examplePinyin:"Fēijī jǐ diǎn chūfā?",exampleTranslation:"Когда вылетает самолёт?",category:"✈️ Аэропорт",hsk:3},
+  {hanzi:"到达",pinyin:"dào dá",tone:"4-2",translation:"Прибывать; Прилетать",example:"飞机什么时候到达上海？",examplePinyin:"Fēijī shénme shíhòu dàodá Shànghǎi?",exampleTranslation:"Когда самолёт прибывает в Шанхай?",category:"✈️ Аэропорт",hsk:3},
+  {hanzi:"入境",pinyin:"rù jìng",tone:"4-4",translation:"Въезд в страну; Иммиграция",example:"请在入境处排队。",examplePinyin:"Qǐng zài rùjìng chù páiduì.",exampleTranslation:"Пожалуйста, встаньте в очередь на паспортный контроль.",category:"✈️ Аэропорт",hsk:4},
+  {hanzi:"出口",pinyin:"chū kǒu",tone:"1-3",translation:"Выход; Экспорт",example:"出口在右边。",examplePinyin:"Chūkǒu zài yòubiān.",exampleTranslation:"Выход справа.",category:"✈️ Аэропорт",hsk:3},
+  {hanzi:"飞机",pinyin:"fēi jī",tone:"1-1",translation:"Самолёт",example:"坐飞机去北京要两个小时。",examplePinyin:"Zuò fēijī qù Běijīng yào liǎng ge xiǎoshí.",exampleTranslation:"Лететь в Пекин на самолёте занимает два часа.",category:"✈️ Аэропорт",hsk:1},
+  {hanzi:"票",pinyin:"piào",tone:"4",translation:"Билет",example:"我需要买一张去上海的机票。",examplePinyin:"Wǒ xūyào mǎi yī zhāng qù Shànghǎi de jīpiào.",exampleTranslation:"Мне нужно купить билет в Шанхай.",category:"✈️ Аэропорт",hsk:1},
+
+  // ── 🏠 Дом ─────────────────────────────────────────────────
+  {hanzi:"家",pinyin:"jiā",tone:"1",translation:"Дом; Семья; Домой",example:"我要回家了。",examplePinyin:"Wǒ yào huí jiā le.",exampleTranslation:"Мне пора идти домой.",category:"🏠 Дом",hsk:1},
+  {hanzi:"房间",pinyin:"fáng jiān",tone:"2-1",translation:"Комната",example:"这个房间很大。",examplePinyin:"Zhège fángjiān hěn dà.",exampleTranslation:"Эта комната очень большая.",category:"🏠 Дом",hsk:2},
+  {hanzi:"厨房",pinyin:"chú fáng",tone:"2-2",translation:"Кухня",example:"我在厨房做饭。",examplePinyin:"Wǒ zài chúfáng zuòfàn.",exampleTranslation:"Я готовлю еду на кухне.",category:"🏠 Дом",hsk:3},
+  {hanzi:"卧室",pinyin:"wò shì",tone:"4-4",translation:"Спальня",example:"卧室在楼上。",examplePinyin:"Wòshì zài lóushàng.",exampleTranslation:"Спальня наверху.",category:"🏠 Дом",hsk:3},
+  {hanzi:"卫生间",pinyin:"wèi shēng jiān",tone:"4-1-1",translation:"Туалет; Ванная",example:"卫生间在走廊尽头。",examplePinyin:"Wèishēngjiān zài zǒuláng jìntóu.",exampleTranslation:"Туалет в конце коридора.",category:"🏠 Дом",hsk:3},
+  {hanzi:"客厅",pinyin:"kè tīng",tone:"4-1",translation:"Гостиная",example:"请到客厅坐。",examplePinyin:"Qǐng dào kètīng zuò.",exampleTranslation:"Пожалуйста, присаживайтесь в гостиной.",category:"🏠 Дом",hsk:3},
+  {hanzi:"桌子",pinyin:"zhuō zi",tone:"1-5",translation:"Стол",example:"文件在桌子上。",examplePinyin:"Wénjiàn zài zhuōzi shàng.",exampleTranslation:"Документы на столе.",category:"🏠 Дом",hsk:1},
+  {hanzi:"椅子",pinyin:"yǐ zi",tone:"3-5",translation:"Стул",example:"请坐椅子。",examplePinyin:"Qǐng zuò yǐzi.",exampleTranslation:"Пожалуйста, присаживайтесь на стул.",category:"🏠 Дом",hsk:1},
+  {hanzi:"床",pinyin:"chuáng",tone:"2",translation:"Кровать",example:"这张床很舒服。",examplePinyin:"Zhè zhāng chuáng hěn shūfu.",exampleTranslation:"Эта кровать очень удобная.",category:"🏠 Дом",hsk:2},
+  {hanzi:"冰箱",pinyin:"bīng xiāng",tone:"1-1",translation:"Холодильник",example:"把食物放进冰箱里。",examplePinyin:"Bǎ shíwù fàng jìn bīngxiāng lǐ.",exampleTranslation:"Положи еду в холодильник.",category:"🏠 Дом",hsk:3},
+  {hanzi:"洗手间",pinyin:"xǐ shǒu jiān",tone:"3-3-1",translation:"Туалет (вежливо)",example:"请问洗手间在哪里？",examplePinyin:"Qǐngwèn xǐshǒujiān zài nǎlǐ?",exampleTranslation:"Скажите пожалуйста, где туалет?",category:"🏠 Дом",hsk:2},
+  {hanzi:"门",pinyin:"mén",tone:"2",translation:"Дверь; Ворота",example:"请关门。",examplePinyin:"Qǐng guān mén.",exampleTranslation:"Пожалуйста, закройте дверь.",category:"🏠 Дом",hsk:1},
+  {hanzi:"窗户",pinyin:"chuāng hu",tone:"1-5",translation:"Окно",example:"请打开窗户。",examplePinyin:"Qǐng dǎkāi chuānghu.",exampleTranslation:"Пожалуйста, откройте окно.",category:"🏠 Дом",hsk:2},
+
+  // ── 👨‍👩‍👧 Семья ────────────────────────────────────────────────
+  {hanzi:"爸爸",pinyin:"bà ba",tone:"4-5",translation:"Папа; Отец",example:"我爸爸是工程师。",examplePinyin:"Wǒ bàba shì gōngchéngshī.",exampleTranslation:"Мой папа инженер.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"妈妈",pinyin:"mā ma",tone:"1-5",translation:"Мама; Мать",example:"我妈妈做饭很好吃。",examplePinyin:"Wǒ māma zuòfàn hěn hǎochī.",exampleTranslation:"Моя мама готовит очень вкусно.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"哥哥",pinyin:"gē ge",tone:"1-5",translation:"Старший брат",example:"我哥哥在北京工作。",examplePinyin:"Wǒ gēge zài Běijīng gōngzuò.",exampleTranslation:"Мой старший брат работает в Пекине.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"姐姐",pinyin:"jiě jie",tone:"3-5",translation:"Старшая сестра",example:"我姐姐结婚了。",examplePinyin:"Wǒ jiějie jiéhūn le.",exampleTranslation:"Моя старшая сестра вышла замуж.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"弟弟",pinyin:"dì di",tone:"4-5",translation:"Младший брат",example:"我弟弟还在上学。",examplePinyin:"Wǒ dìdi hái zài shàngxué.",exampleTranslation:"Мой младший брат ещё учится в школе.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"妹妹",pinyin:"mèi mei",tone:"4-5",translation:"Младшая сестра",example:"我妹妹很可爱。",examplePinyin:"Wǒ mèimei hěn kě'ài.",exampleTranslation:"Моя младшая сестра очень милая.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"孩子",pinyin:"hái zi",tone:"2-5",translation:"Ребёнок; Дети",example:"你有孩子吗？",examplePinyin:"Nǐ yǒu háizi ma?",exampleTranslation:"У тебя есть дети?",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"丈夫",pinyin:"zhàng fu",tone:"4-5",translation:"Муж",example:"我丈夫是商人。",examplePinyin:"Wǒ zhàngfu shì shāngrén.",exampleTranslation:"Мой муж бизнесмен.",category:"👨‍👩‍👧 Семья",hsk:2},
+  {hanzi:"妻子",pinyin:"qī zi",tone:"1-5",translation:"Жена",example:"我妻子在上海工作。",examplePinyin:"Wǒ qīzi zài Shànghǎi gōngzuò.",exampleTranslation:"Моя жена работает в Шанхае.",category:"👨‍👩‍👧 Семья",hsk:2},
+  {hanzi:"爷爷",pinyin:"yé ye",tone:"2-5",translation:"Дедушка (по отцу)",example:"爷爷七十岁了。",examplePinyin:"Yéye qīshí suì le.",exampleTranslation:"Дедушке уже семьдесят лет.",category:"👨‍👩‍👧 Семья",hsk:2},
+  {hanzi:"奶奶",pinyin:"nǎi nai",tone:"3-5",translation:"Бабушка (по отцу)",example:"奶奶身体很好。",examplePinyin:"Nǎinai shēntǐ hěn hǎo.",exampleTranslation:"Бабушка в добром здравии.",category:"👨‍👩‍👧 Семья",hsk:2},
+  {hanzi:"朋友",pinyin:"péng you",tone:"2-5",translation:"Друг",example:"他是我最好的朋友。",examplePinyin:"Tā shì wǒ zuì hǎo de péngyou.",exampleTranslation:"Он мой лучший друг.",category:"👨‍👩‍👧 Семья",hsk:1},
+  {hanzi:"结婚",pinyin:"jié hūn",tone:"2-1",translation:"Жениться; Выходить замуж",example:"他们去年结婚了。",examplePinyin:"Tāmen qùnián jiéhūn le.",exampleTranslation:"Они поженились в прошлом году.",category:"👨‍👩‍👧 Семья",hsk:3},
+
+  // ── 🛒 Магазин ─────────────────────────────────────────────
+  {hanzi:"超市",pinyin:"chāo shì",tone:"1-4",translation:"Супермаркет",example:"我要去超市买东西。",examplePinyin:"Wǒ yào qù chāoshì mǎi dōngxi.",exampleTranslation:"Я иду в супермаркет за покупками.",category:"🛒 Магазин",hsk:2},
+  {hanzi:"东西",pinyin:"dōng xi",tone:"1-5",translation:"Вещь; Предмет; Что-то",example:"这个东西多少钱？",examplePinyin:"Zhège dōngxi duōshǎo qián?",exampleTranslation:"Сколько стоит эта вещь?",category:"🛒 Магазин",hsk:1},
+  {hanzi:"钱",pinyin:"qián",tone:"2",translation:"Деньги",example:"我没有零钱。",examplePinyin:"Wǒ méiyǒu língqián.",exampleTranslation:"У меня нет мелочи.",category:"🛒 Магазин",hsk:1},
+  {hanzi:"元",pinyin:"yuán",tone:"2",translation:"Юань (единица валюты)",example:"这件衬衫两百元。",examplePinyin:"Zhè jiàn chènshān liǎng bǎi yuán.",exampleTranslation:"Эта рубашка стоит двести юаней.",category:"🛒 Магазин",hsk:1},
+  {hanzi:"打折",pinyin:"dǎ zhé",tone:"3-2",translation:"Скидка; Со скидкой",example:"这件衣服打八折。",examplePinyin:"Zhè jiàn yīfu dǎ bā zhé.",exampleTranslation:"На эту одежду скидка 20% (платишь 80%).",category:"🛒 Магазин",hsk:3},
+  {hanzi:"收据",pinyin:"shōu jù",tone:"1-4",translation:"Чек; Квитанция",example:"请给我收据。",examplePinyin:"Qǐng gěi wǒ shōujù.",exampleTranslation:"Пожалуйста, дайте мне чек.",category:"🛒 Магазин",hsk:4},
+  {hanzi:"付钱",pinyin:"fù qián",tone:"4-2",translation:"Платить; Расплачиваться",example:"我用微信付钱。",examplePinyin:"Wǒ yòng Wēixìn fù qián.",exampleTranslation:"Я плачу через WeChat.",category:"🛒 Магазин",hsk:3},
+  {hanzi:"换",pinyin:"huàn",tone:"4",translation:"Менять; Обменивать",example:"我想换一个大一点的尺码。",examplePinyin:"Wǒ xiǎng huàn yī ge dà yīdiǎn de chǐmǎ.",exampleTranslation:"Я хочу обменять на размер побольше.",category:"🛒 Магазин",hsk:3},
+  {hanzi:"颜色",pinyin:"yán sè",tone:"2-4",translation:"Цвет",example:"这件衣服有其他颜色吗？",examplePinyin:"Zhè jiàn yīfu yǒu qítā yánsè ma?",exampleTranslation:"Эта одежда есть в других цветах?",category:"🛒 Магазин",hsk:2},
+  {hanzi:"尺码",pinyin:"chǐ mǎ",tone:"3-3",translation:"Размер (одежды)",example:"我穿中号尺码。",examplePinyin:"Wǒ chuān zhōng hào chǐmǎ.",exampleTranslation:"Я ношу средний размер.",category:"🛒 Магазин",hsk:4},
+  {hanzi:"衣服",pinyin:"yī fu",tone:"1-5",translation:"Одежда",example:"这件衣服很好看。",examplePinyin:"Zhè jiàn yīfu hěn hǎokàn.",exampleTranslation:"Эта одежда очень красивая.",category:"🛒 Магазин",hsk:1},
+  {hanzi:"试穿",pinyin:"shì chuān",tone:"4-1",translation:"Примерить",example:"我可以试穿一下吗？",examplePinyin:"Wǒ kěyǐ shì chuān yīxià ma?",exampleTranslation:"Можно я примерю?",category:"🛒 Магазин",hsk:4},
 ];
 
 // ── Tones data ─────────────────────────────────────────────────
@@ -384,6 +443,7 @@ const state = {
   quiz: { current:null, options:[], answered:null, score:0, total:0, mode:'translation', categoryFilter:'все' },
   activeGrammar: 'word-order',
   activePhrasesCat: 0,
+  hanziTab: 'etymology',
 };
 
 const tabs = [
@@ -395,6 +455,7 @@ const tabs = [
   ['grammar','Грамматика'],
   ['phrases','Фразы'],
   ['measure','Счётные слова'],
+  ['hanzi','汉字 Иероглифы'],
 ];
 
 // ── Helpers ────────────────────────────────────────────────────
@@ -607,6 +668,70 @@ function renderTones(){
       </div>
       <div class="notice gold">
         💡 Правило тонального знака: знак тона ставится над гласной в следующем порядке приоритета: a, e → о → i, u, ü (если вместе, знак на последней). Исключение: ui и iu — знак на второй гласной.
+      </div>
+    </div>
+
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="section-title">Произношение пиньиня — полный гид</div>
+      <div class="notice gold" style="margin-bottom:16px">
+        💡 Пиньинь читается НЕ как английский и НЕ как русский. У многих букв особое произношение. Выучи эту таблицу один раз — и сможешь читать любое китайское слово правильно.
+      </div>
+
+      <div style="margin-bottom:20px">
+        <div style="font-size:15px;font-weight:800;margin-bottom:12px;color:var(--primary)">🔴 Согласные — самые важные отличия от русского</div>
+        <div class="table-wrapper">
+          <table class="verb-table">
+            <thead><tr><th>Пиньинь</th><th>Произношение</th><th>Пример</th><th>Русская подсказка</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">x</td><td>Мягкое «ш» — язык у нижних зубов</td><td>xǐ huān (喜欢)</td><td>Как «щ» но мягче</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">q</td><td>Мягкое «ч» — язык у нижних зубов</td><td>qǐng (请)</td><td>Как «чь»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">j</td><td>Мягкое «дж» — язык у нижних зубов</td><td>jīn tiān (今天)</td><td>Как «дзь»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">zh</td><td>Твёрдое «дж» — язык загнут назад</td><td>zhōng guó (中国)</td><td>Как «дж» с загнутым языком</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">ch</td><td>Твёрдое «ч» — язык загнут назад</td><td>chī (吃)</td><td>Как «ч» с загнутым языком</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">sh</td><td>Твёрдое «ш» — язык загнут назад</td><td>shì (是)</td><td>Как «ш» с загнутым языком</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">r</td><td>Между «р» и «ж» — язык загнут назад</td><td>rén (人)</td><td>Как «жь» — мягкое жужжание</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">z</td><td>Краткое «дз»</td><td>zài (在)</td><td>Как «дз» в «дзинь»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">c</td><td>Краткое «тс»</td><td>cì (次)</td><td>Как «ц» в «царь»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--primary)">h</td><td>Как «х» но глубже, из горла</td><td>hǎo (好)</td><td>Как «х» но горловое</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px">
+        <div style="font-size:15px;font-weight:800;margin-bottom:12px;color:var(--gold)">🟡 Гласные — самые коварные</div>
+        <div class="table-wrapper">
+          <table class="verb-table">
+            <thead><tr><th>Пиньинь</th><th>Произношение</th><th>Пример</th><th>Подсказка</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">e</td><td>Как «э» с приоткрытым ртом</td><td>hē (喝)</td><td>Не «е» как в русском!</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">i (после zh,ch,sh,r,z,c,s)</td><td>Особый звук — «ы» с загнутым языком</td><td>zhī, chī, shì</td><td>Почти как «ы» — не «и»!</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">u (после j,q,x,y)</td><td>Как немецкое «ü» — губы трубочкой, звук «и»</td><td>xū, qù, yú</td><td>Губы как при «у», звук как «и»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">ian</td><td>Произносится как «иен»</td><td>tiān (天)</td><td>Не «иан», а «иен»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">iu</td><td>Произносится как «иоу»</td><td>liù (六)</td><td>Средний звук «о» проглочен</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">ui</td><td>Произносится как «уэй»</td><td>guì (贵)</td><td>Средний звук «э» проглочен</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">un</td><td>Произносится как «уэн»</td><td>wǒmen (我们)</td><td>Как «юнь» быстро</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--gold)">ong</td><td>Произносится как «ун» (закрытое)</td><td>gōngsī (公司)</td><td>Не «онг», а «ун»</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:15px;font-weight:800;margin-bottom:12px;color:var(--green)">🟢 Начала слогов без согласной</div>
+        <div class="table-wrapper">
+          <table class="verb-table">
+            <thead><tr><th>Пиньинь</th><th>На самом деле</th><th>Пример</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--green)">yi-</td><td>Просто «и-»</td><td>yī (一) = «и»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--green)">wu-</td><td>Просто «у-»</td><td>wǒ (我) = «уо»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--green)">yu-</td><td>«ü-» (губы трубочкой)</td><td>yuè (月) = «ü-э»</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--green)">yan</td><td>«иен» (не «ян»)</td><td>yán (言)</td></tr>
+              <tr><td style="font-weight:800;font-size:15px;color:var(--green)">yin</td><td>«инь» (носовой н)</td><td>yīn (音)</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -1011,6 +1136,163 @@ function renderMeasure(){
     </div>`;
 }
 
+
+// ── Hanzi data ─────────────────────────────────────────────────
+const etymologyData = [
+  { hanzi:"日", pinyin:"rì", tone:"4", meaning:"Солнце", original:"☀", evolution:"Древний рисунок: круг с точкой посередине ⊙ → прямоугольник с чертой", mnemonic:"Прямоугольник с перекладиной — окно, через которое светит солнце", compounds:[{w:"明",py:"míng",m:"Яркий = 日солнце + 月луна"},{w:"晴",py:"qíng",m:"Солнечно = 日солнце + 青голубой"},{w:"时",py:"shí",m:"Время = 日солнце + 寸мера"}] },
+  { hanzi:"月", pinyin:"yuè", tone:"4", meaning:"Луна; Месяц", original:"☽", evolution:"Полумесяц с двумя штрихами внутри → 月", mnemonic:"Полумесяц — луна видна в виде серпа", compounds:[{w:"明",py:"míng",m:"Яркий = 日солнце + 月луна"},{w:"朋",py:"péng",m:"Друг = 月+月 (два месяца рядом)"},{w:"期",py:"qī",m:"Период = 其+月луна"}] },
+  { hanzi:"山", pinyin:"shān", tone:"1", meaning:"Гора", original:"⛰", evolution:"Три пика горы — средний выше двух боковых", mnemonic:"Три вертикальных черты — три горных пика. Нарисуй гору — получишь 山", compounds:[{w:"出",py:"chū",m:"Выходить = два 山 друг на друге (подъём)"},{w:"岛",py:"dǎo",m:"Остров = 鸟птица + 山гора"},{w:"崇",py:"chóng",m:"Возвышенный = 山гора сверху"}] },
+  { hanzi:"水", pinyin:"shuǐ", tone:"3", meaning:"Вода", original:"〰", evolution:"Волнистые линии воды → 水", mnemonic:"Центральная вертикаль — русло реки, волнистые линии по бокам — течение", compounds:[{w:"海",py:"hǎi",m:"Море = 氵вода + 每каждый"},{w:"河",py:"hé",m:"Река = 氵вода + 可можно"},{w:"泳",py:"yǒng",m:"Плыть = 氵вода + 永вечный"}] },
+  { hanzi:"火", pinyin:"huǒ", tone:"3", meaning:"Огонь", original:"🔥", evolution:"Пламя костра с языками вверх → 火", mnemonic:"Центральный треугольник — костёр, линии по бокам — языки пламени", compounds:[{w:"炎",py:"yán",m:"Знойный = 火+火 (два огня)"},{w:"烤",py:"kǎo",m:"Жарить = 火огонь + 考проверять"},{w:"灯",py:"dēng",m:"Лампа = 火огонь + 丁гвоздь"}] },
+  { hanzi:"木", pinyin:"mù", tone:"4", meaning:"Дерево; Дерево (материал)", original:"🌲", evolution:"Ствол с ветками вверх и корнями вниз → 木", mnemonic:"Крест с дополнительной чертой внизу: вертикаль — ствол, горизонталь — ветки, нижняя — корни", compounds:[{w:"林",py:"lín",m:"Роща = 木+木 (два дерева)"},{w:"森",py:"sēn",m:"Лес = 木+木+木 (три дерева)"},{w:"桌",py:"zhuō",m:"Стол = 木дерево + 卓высокий"}] },
+  { hanzi:"人", pinyin:"rén", tone:"2", meaning:"Человек", original:"🚶", evolution:"Силуэт человека сбоку с двумя ногами → 人", mnemonic:"Две черты — две ноги идущего человека. Самый простой иероглиф!", compounds:[{w:"从",py:"cóng",m:"Следовать = 人+人 (один за другим)"},{w:"众",py:"zhòng",m:"Толпа = 人+人+人 (три человека)"},{w:"休",py:"xiū",m:"Отдыхать = 人человек + 木дерево (прислонился)"}] },
+  { hanzi:"口", pinyin:"kǒu", tone:"3", meaning:"Рот; Вход; Отверстие", original:"👄", evolution:"Форма раскрытого рта → прямоугольник 口", mnemonic:"Прямоугольник — открытый рот. Используется в словах о речи, еде, входах", compounds:[{w:"唱",py:"chàng",m:"Петь = 口рот + 昌процветать"},{w:"喝",py:"hē",m:"Пить = 口рот + 曷откуда"},{w:"国",py:"guó",m:"Страна = 口граница + 玉нефрит"}] },
+  { hanzi:"手", pinyin:"shǒu", tone:"3", meaning:"Рука", original:"✋", evolution:"Пять пальцев руки → упрощение до 手", mnemonic:"Горизонтальные черты — пальцы, вертикаль — ладонь. Три пальца видны явно", compounds:[{w:"拿",py:"ná",m:"Держать = 合合+手рука"},{w:"打",py:"dǎ",m:"Бить = 扌рука + 丁гвоздь"},{w:"找",py:"zhǎo",m:"Искать = 扌рука + 戈копьё"}] },
+  { hanzi:"心", pinyin:"xīn", tone:"1", meaning:"Сердце; Разум; Чувства", original:"❤", evolution:"Форма сердца с тремя точками → 心", mnemonic:"Три точки — три сердечных удара. Главный радикал для слов о чувствах", compounds:[{w:"想",py:"xiǎng",m:"Думать = 相взаимно + 心сердце"},{w:"忙",py:"máng",m:"Занятый = 忄сердце + 亡потеря"},{w:"忘",py:"wàng",m:"Забыть = 亡исчезнуть + 心сердце"}] },
+  { hanzi:"目", pinyin:"mù", tone:"4", meaning:"Глаз", original:"👁", evolution:"Овал глаза с зрачком → повёрнут вертикально 目", mnemonic:"Прямоугольник с двумя перекладинами — глаз с веками. Повёрнут на 90°", compounds:[{w:"看",py:"kàn",m:"Смотреть = 手рука + 目глаз (рука над глазом)"},{w:"眼",py:"yǎn",m:"Глаз (орган) = 目глаз + 艮граница"},{w:"睡",py:"shuì",m:"Спать = 目глаз + 垂опускаться"}] },
+  { hanzi:"门", pinyin:"mén", tone:"2", meaning:"Дверь; Ворота", original:"🚪", evolution:"Два дверных полотна распашных ворот → 门", mnemonic:"Два вертикальных столбика с перекладиной — рама ворот. Видно форму!", compounds:[{w:"问",py:"wèn",m:"Спрашивать = 门дверь + 口рот (кричать в дверь)"},{w:"间",py:"jiān",m:"Промежуток = 门ворота + 日солнце (солнце в щели)"},{w:"闻",py:"wén",m:"Слышать = 门ворота + 耳ухо"}] },
+  { hanzi:"女", pinyin:"nǚ", tone:"3", meaning:"Женщина; Дочь", original:"🙍‍♀️", evolution:"Силуэт женщины сидящей со скрещенными руками → 女", mnemonic:"Фигура с перекладиной — силуэт женщины. Главный радикал для слов о семье", compounds:[{w:"妈",py:"mā",m:"Мама = 女женщина + 马лошадь (фонетик)"},{w:"好",py:"hǎo",m:"Хорошо = 女женщина + 子ребёнок"},{w:"姐",py:"jiě",m:"Старшая сестра = 女женщина + 且кроме того"}] },
+  { hanzi:"子", pinyin:"zǐ", tone:"3", meaning:"Ребёнок; Сын; Суффикс", original:"👶", evolution:"Ребёнок с поднятыми руками → 子", mnemonic:"Маленькая фигурка с головой — ребёнок. В суффиксах делает слово ласкательным", compounds:[{w:"好",py:"hǎo",m:"Хорошо = 女женщина + 子ребёнок"},{w:"字",py:"zì",m:"Иероглиф = 宀крыша + 子ребёнок"},{w:"学",py:"xué",m:"Учиться = 学+子ребёнок"}] },
+  { hanzi:"大", pinyin:"dà", tone:"4", meaning:"Большой", original:"🙆", evolution:"Человек с раскинутыми руками — «вот такой большой!» → 大", mnemonic:"Человек с широко расставленными руками показывает: большо-о-ой! Так и переводится.", compounds:[{w:"太",py:"tài",m:"Слишком = 大большой + точка (ещё больше)"},{w:"天",py:"tiān",m:"Небо = 大человек + горизонталь (над головой)"},{w:"夫",py:"fū",m:"Муж = 大человек + черта (повязка)"}] },
+];
+
+const radicalsData = [
+  {r:"氵",name:"Вода",meaning:"Жидкость, реки, море",examples:"海(hǎi) море · 河(hé) река · 油(yóu) масло · 泳(yǒng) плавать · 洗(xǐ) мыть"},
+  {r:"木",name:"Дерево",meaning:"Деревья, мебель, материалы",examples:"桌(zhuō) стол · 椅(yǐ) стул · 树(shù) дерево · 桥(qiáo) мост · 板(bǎn) доска"},
+  {r:"口",name:"Рот",meaning:"Речь, еда, отверстия",examples:"吃(chī) есть · 喝(hē) пить · 说(shuō) говорить · 唱(chàng) петь · 问(wèn) спрашивать"},
+  {r:"扌",name:"Рука",meaning:"Действия руками",examples:"打(dǎ) бить · 拿(ná) держать · 找(zhǎo) искать · 推(tuī) толкать · 拉(lā) тянуть"},
+  {r:"忄",name:"Сердце",meaning:"Чувства, эмоции",examples:"忙(máng) занятой · 快(kuài) быстрый · 怕(pà) бояться · 情(qíng) чувство · 愉(yú) радость"},
+  {r:"火",name:"Огонь",meaning:"Тепло, свет, готовка",examples:"烤(kǎo) жарить · 烧(shāo) гореть · 灯(dēng) лампа · 热(rè) горячий · 炒(chǎo) жарить (помешивая)"},
+  {r:"人/亻",name:"Человек",meaning:"Люди, действия людей",examples:"他(tā) он · 你(nǐ) ты · 做(zuò) делать · 住(zhù) жить · 休(xiū) отдыхать"},
+  {r:"女",name:"Женщина",meaning:"Женщины, родство, семья",examples:"妈(mā) мама · 姐(jiě) сестра · 她(tā) она · 好(hǎo) хорошо · 姓(xìng) фамилия"},
+  {r:"言/讠",name:"Слово",meaning:"Речь, язык, общение",examples:"说(shuō) говорить · 请(qǐng) просить · 谢(xiè) благодарить · 话(huà) слова · 语(yǔ) язык"},
+  {r:"日",name:"Солнце",meaning:"Время, свет, дни",examples:"明(míng) яркий · 时(shí) время · 晴(qíng) солнечно · 早(zǎo) рано · 晚(wǎn) поздно"},
+  {r:"月",name:"Луна/Тело",meaning:"Части тела (в этом значении)",examples:"脸(liǎn) лицо · 脚(jiǎo) нога · 肉(ròu) мясо · 胖(pàng) толстый · 腿(tuǐ) нога (бедро)"},
+  {r:"土",name:"Земля",meaning:"Почва, строения",examples:"地(dì) земля · 城(chéng) город · 坐(zuò) сидеть · 块(kuài) кусок · 墙(qiáng) стена"},
+  {r:"金/钅",name:"Металл",meaning:"Металлы, деньги, инструменты",examples:"钱(qián) деньги · 银(yín) серебро · 铁(tiě) железо · 钟(zhōng) часы · 锁(suǒ) замок"},
+  {r:"目",name:"Глаз",meaning:"Зрение, взгляд",examples:"看(kàn) смотреть · 眼(yǎn) глаз · 睡(shuì) спать · 盲(máng) слепой · 督(dū) контролировать"},
+  {r:"草/艹",name:"Трава",meaning:"Растения, природа",examples:"花(huā) цветок · 草(cǎo) трава · 茶(chá) чай · 药(yào) лекарство · 菜(cài) овощ"},
+];
+
+const compoundExamples = [
+  { result:"好", pinyin:"hǎo", meaning:"Хорошо; Хороший", parts:[{h:"女",m:"женщина"},{h:"子",m:"ребёнок"}], logic:"Женщина с ребёнком — всё хорошо, семья в сборе" },
+  { result:"明", pinyin:"míng", meaning:"Яркий; Понятный", parts:[{h:"日",m:"солнце"},{h:"月",m:"луна"}], logic:"Солнце и луна вместе — максимальная яркость" },
+  { result:"休", pinyin:"xiū", meaning:"Отдыхать", parts:[{h:"人",m:"человек"},{h:"木",m:"дерево"}], logic:"Человек прислонился к дереву — отдыхает" },
+  { result:"森", pinyin:"sēn", meaning:"Лес; Густой", parts:[{h:"木",m:"дерево"},{h:"木",m:"дерево"},{h:"木",m:"дерево"}], logic:"Три дерева = много деревьев = лес" },
+  { result:"众", pinyin:"zhòng", meaning:"Толпа; Множество", parts:[{h:"人",m:"человек"},{h:"人",m:"человек"},{h:"人",m:"человек"}], logic:"Три человека = толпа, много людей" },
+  { result:"炎", pinyin:"yán", meaning:"Знойный; Воспаление", parts:[{h:"火",m:"огонь"},{h:"火",m:"огонь"}], logic:"Два огня = очень горячо, воспаление" },
+  { result:"看", pinyin:"kàn", meaning:"Смотреть; Читать", parts:[{h:"手",m:"рука"},{h:"目",m:"глаз"}], logic:"Рука над глазом — прикрыться от солнца, чтобы лучше видеть" },
+  { result:"问", pinyin:"wèn", meaning:"Спрашивать", parts:[{h:"门",m:"дверь"},{h:"口",m:"рот"}], logic:"Рот у двери — кричишь вопрос в закрытую дверь" },
+  { result:"间", pinyin:"jiān", meaning:"Промежуток; Комната", parts:[{h:"门",m:"ворота"},{h:"日",m:"солнце"}], logic:"Солнечный свет проникает в щель между воротами" },
+  { result:"男", pinyin:"nán", meaning:"Мужчина", parts:[{h:"田",m:"поле"},{h:"力",m:"сила"}], logic:"Сила в поле — мужчина работает на поле" },
+  { result:"安", pinyin:"ān", meaning:"Спокойный; Безопасный", parts:[{h:"宀",m:"крыша"},{h:"女",m:"женщина"}], logic:"Женщина под крышей — спокойствие, безопасность дома" },
+  { result:"家", pinyin:"jiā", meaning:"Дом; Семья", parts:[{h:"宀",m:"крыша"},{h:"豕",m:"свинья"}], logic:"Свинья под крышей — дом (в древнем Китае свиньи жили в доме)" },
+  { result:"明白", pinyin:"míngbai", meaning:"Понимать; Ясный", parts:[{h:"明",m:"яркий"},{h:"白",m:"белый"}], logic:"Ярко и белоснежно — всё ясно, понятно" },
+  { result:"电话", pinyin:"diànhuà", meaning:"Телефон", parts:[{h:"电",m:"электричество"},{h:"话",m:"слова/речь"}], logic:"Электрические слова — телефон передаёт речь по электричеству" },
+  { result:"电脑", pinyin:"diànnǎo", meaning:"Компьютер", parts:[{h:"电",m:"электричество"},{h:"脑",m:"мозг"}], logic:"Электрический мозг — компьютер думает как мозг, но электрический" },
+];
+
+// ── Hanzi render ───────────────────────────────────────────────
+function renderHanzi(){
+  const subtab = state.hanziTab || 'etymology';
+  document.getElementById('hanzi').innerHTML = `
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn ${subtab==='etymology'?'':'secondary'}" onclick="setHanziTab('etymology')">📜 Этимология</button>
+      <button class="btn ${subtab==='radicals'?'':'secondary'}" onclick="setHanziTab('radicals')">🔑 Радикалы</button>
+      <button class="btn ${subtab==='compounds'?'':'secondary'}" onclick="setHanziTab('compounds')">🧩 Составные иероглифы</button>
+    </div>
+
+    ${subtab === 'etymology' ? `
+      <div class="notice gold" style="margin-bottom:16px">
+        💡 Иероглифы произошли из рисунков — пиктограмм. Зная историю знака, запомнить его в 3 раза легче. Нажимай на иероглиф чтобы услышать произношение.
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
+        ${etymologyData.map(e=>`
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+              <div class="hanzi-large" style="cursor:pointer;line-height:1" onclick="speakChinese('${esc(e.hanzi)}')">${esc(e.hanzi)}</div>
+              <div>
+                <div class="pinyin" style="font-size:16px">${esc(e.pinyin)}</div>
+                <div style="font-weight:800;font-size:15px;margin-top:4px">${esc(e.meaning)}</div>
+              </div>
+            </div>
+            <div style="display:grid;gap:8px">
+              <div style="padding:10px 12px;background:var(--gold-soft);border-radius:var(--radius-xs);border:1px solid #fcd34d">
+                <div style="font-size:11px;font-weight:700;color:var(--gold-text);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Происхождение</div>
+                <div style="font-size:13px;color:var(--text)">${esc(e.evolution)}</div>
+              </div>
+              <div style="padding:10px 12px;background:var(--primary-soft);border-radius:var(--radius-xs);border:1px solid #fca5a5">
+                <div style="font-size:11px;font-weight:700;color:var(--primary-text);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Мнемоника</div>
+                <div style="font-size:13px;color:var(--text)">${esc(e.mnemonic)}</div>
+              </div>
+              <div style="padding:10px 12px;background:var(--green-soft);border-radius:var(--radius-xs);border:1px solid #a7f3d0">
+                <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Встречается в словах</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  ${e.compounds.map(c=>`<div style="text-align:center">
+                    <div style="font-size:22px;font-weight:900;color:var(--primary);cursor:pointer" onclick="speakChinese('${esc(c.w)}')">${esc(c.w)}</div>
+                    <div style="font-size:11px;color:var(--muted)">${esc(c.py)}</div>
+                    <div style="font-size:11px;color:var(--text);margin-top:2px">${esc(c.m)}</div>
+                  </div>`).join('')}
+                </div>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>` : ''}
+
+    ${subtab === 'radicals' ? `
+      <div class="notice gold" style="margin-bottom:16px">
+        💡 Радикал (偏旁 piānpáng) — смысловой ключ иероглифа. Зная ~50 основных радикалов, можно угадывать значение незнакомых слов. Большинство словарей организованы по радикалам.
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+        ${radicalsData.map(r=>`
+          <div class="card" style="cursor:pointer" onclick="speakChinese('${esc(r.r)}')">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
+              <div style="font-size:42px;font-weight:900;color:var(--primary);line-height:1;min-width:48px;text-align:center">${esc(r.r)}</div>
+              <div>
+                <div style="font-weight:800;font-size:15px">${esc(r.name)}</div>
+                <div class="small-muted">${esc(r.meaning)}</div>
+              </div>
+            </div>
+            <div style="font-size:13px;line-height:1.8;color:var(--text);padding:8px 10px;background:var(--bg);border-radius:var(--radius-xs)">${esc(r.examples)}</div>
+          </div>`).join('')}
+      </div>` : ''}
+
+    ${subtab === 'compounds' ? `
+      <div class="notice gold" style="margin-bottom:16px">
+        💡 Большинство китайских слов — это сочетание 2-3 иероглифов. Каждая часть несёт смысл, и вместе они создают новое значение. Это логика, а не случайность!
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+        ${compoundExamples.map(c=>`
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+              <div class="hanzi" style="cursor:pointer;font-size:42px" onclick="speakChinese('${esc(c.result)}')">${esc(c.result)}</div>
+              <div>
+                <div class="pinyin">${esc(c.pinyin)}</div>
+                <div style="font-weight:800;margin-top:4px">${esc(c.meaning)}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+              ${c.parts.map((p,i)=>`
+                ${i>0?`<div style="font-size:18px;color:var(--muted)">+</div>`:''}
+                <div style="text-align:center;padding:8px 12px;background:var(--bg);border-radius:var(--radius-xs);border:1px solid var(--line)">
+                  <div style="font-size:26px;font-weight:900;color:var(--primary)">${esc(p.h)}</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:2px">${esc(p.m)}</div>
+                </div>`).join('')}
+              <div style="font-size:18px;color:var(--muted)">=</div>
+              <div style="text-align:center;padding:8px 12px;background:var(--primary-soft);border-radius:var(--radius-xs);border:1px solid #fca5a5">
+                <div style="font-size:26px;font-weight:900;color:var(--primary)">${esc(c.result)}</div>
+                <div style="font-size:11px;color:var(--primary-text);margin-top:2px">${esc(c.meaning)}</div>
+              </div>
+            </div>
+            <div style="font-size:13px;padding:8px 12px;background:var(--gold-soft);border-radius:var(--radius-xs);border:1px solid #fcd34d;color:var(--gold-text)">
+              💡 ${esc(c.logic)}
+            </div>
+          </div>`).join('')}
+      </div>` : ''}`;
+}
+function setHanziTab(tab){ state.hanziTab = tab; renderHanzi(); }
+
+
 // ── Init ───────────────────────────────────────────────────────
 function renderAll(){
   renderTabs();
@@ -1023,6 +1305,7 @@ function renderAll(){
   renderGrammar();
   renderPhrases();
   renderMeasure();
+  renderHanzi();
   const saved=localStorage.getItem('zh_theme')||'light';
   const btn=document.getElementById('theme-btn');
   if(btn) btn.textContent=saved==='dark'?'☀️ Светлая':'🌙 Тёмная';
