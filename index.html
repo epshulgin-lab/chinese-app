@@ -173,6 +173,8 @@
   <section id="grammar" class="tab-pane"></section>
   <section id="phrases" class="tab-pane"></section>
   <section id="measure" class="tab-pane"></section>
+  <section id="radicals" class="tab-pane"></section>
+  <section id="reading" class="tab-pane"></section>
   <section id="hanzi" class="tab-pane"></section>
 </div>
 
@@ -430,6 +432,66 @@ const phrases = [
     {ch:"我不太明白。",py:"Wǒ bú tài míngbai.",ru:"Я не совсем понимаю."},
     {ch:"用中文怎么说…？",py:"Yòng Zhōngwén zěnme shuō…?",ru:"Как сказать … по-китайски?"},
   ]},
+];
+
+
+// ── Radicals data ──────────────────────────────────────────────
+const radicalsData = [
+  {radical:"人",pinyin:"rén",meaning:"человек",examples:[{h:"他",p:"tā",m:"он"},{h:"你",p:"nǐ",m:"ты"},{h:"们",p:"men",m:"суфф. мн.ч."}],tip:"Похож на идущего человека — две ноги"},
+  {radical:"口",pinyin:"kǒu",meaning:"рот",examples:[{h:"吃",p:"chī",m:"есть"},{h:"喝",p:"hē",m:"пить"},{h:"说",p:"shuō",m:"говорить"}],tip:"Квадратик = открытый рот"},
+  {radical:"水 氵",pinyin:"shuǐ",meaning:"вода",examples:[{h:"河",p:"hé",m:"река"},{h:"海",p:"hǎi",m:"море"},{h:"洗",p:"xǐ",m:"мыть"}],tip:"3 капли слева = что-то связанное с водой"},
+  {radical:"火 灬",pinyin:"huǒ",meaning:"огонь",examples:[{h:"热",p:"rè",m:"горячий"},{h:"烧",p:"shāo",m:"жечь"},{h:"炒",p:"chǎo",m:"жарить"}],tip:"4 точки снизу или 火 = огонь, жара"},
+  {radical:"木",pinyin:"mù",meaning:"дерево",examples:[{h:"树",p:"shù",m:"дерево"},{h:"桌",p:"zhuō",m:"стол"},{h:"椅",p:"yǐ",m:"стул"}],tip:"Крест с корнями = дерево. Всё деревянное"},
+  {radical:"手 扌",pinyin:"shǒu",meaning:"рука",examples:[{h:"打",p:"dǎ",m:"бить; делать"},{h:"拿",p:"ná",m:"брать"},{h:"把",p:"bǎ",m:"держать"}],tip:"3 черты слева = рука. Действие руками"},
+  {radical:"心 忄",phonyin:"xīn",meaning:"сердце",examples:[{h:"想",p:"xiǎng",m:"думать"},{h:"感",p:"gǎn",m:"чувствовать"},{h:"忙",p:"máng",m:"занятый"}],tip:"Чувства, эмоции, мысли"},
+  {radical:"日",pinyin:"rì",meaning:"солнце; день",examples:[{h:"明",p:"míng",m:"яркий; завтра"},{h:"时",p:"shí",m:"время"},{h:"晚",p:"wǎn",m:"вечер"}],tip:"Квадрат с чертой внутри = солнце"},
+  {radical:"月",pinyin:"yuè",meaning:"луна; месяц",examples:[{h:"明",p:"míng",m:"яркий"},{h:"朋",p:"péng",m:"друг"},{h:"期",p:"qī",m:"период"}],tip:"Луна = время, периоды. Тж. мясо в теле"},
+  {radical:"金 钅",pinyin:"jīn",meaning:"металл; золото",examples:[{h:"钱",p:"qián",m:"деньги"},{h:"银",p:"yín",m:"серебро"},{h:"铁",p:"tiě",m:"железо"}],tip:"Всё металлическое, деньги"},
+  {radical:"言 讠",pinyin:"yán",meaning:"речь; слова",examples:[{h:"说",p:"shuō",m:"говорить"},{h:"请",p:"qǐng",m:"просить"},{h:"谢",p:"xiè",m:"благодарить"}],tip:"Точка + черта = слова. Всё связанное с речью"},
+  {radical:"土",pinyin:"tǔ",meaning:"земля; почва",examples:[{h:"在",p:"zài",m:"находиться"},{h:"地",p:"dì",m:"земля; место"},{h:"城",p:"chéng",m:"город"}],tip:"Крест на основании = земля"},
+  {radical:"女",pinyin:"nǚ",meaning:"женщина",examples:[{h:"妈",p:"mā",m:"мама"},{h:"姐",p:"jiě",m:"старшая сестра"},{h:"她",p:"tā",m:"она"}],tip:"Коленопреклонённая фигура = женщина"},
+  {radical:"目",pinyin:"mù",meaning:"глаз",examples:[{h:"看",p:"kàn",m:"смотреть"},{h:"眼",p:"yǎn",m:"глаз"},{h:"睡",p:"shuì",m:"спать"}],tip:"Вертикальный прямоугольник = глаз"},
+  {radical:"门",pinyin:"mén",meaning:"дверь; ворота",examples:[{h:"问",p:"wèn",m:"спрашивать"},{h:"间",p:"jiān",m:"комната"},{h:"开",p:"kāi",m:"открывать"}],tip:"Ворота = вход, пространство"},
+  {radical:"大",pinyin:"dà",meaning:"большой",examples:[{h:"天",p:"tiān",m:"небо; день"},{h:"太",p:"tài",m:"слишком"},{h:"夫",p:"fū",m:"муж"}],tip:"Человек с раскинутыми руками = большой"},
+];
+
+// ── Reading texts (HSK 1-2) ────────────────────────────────────
+const readingTexts = [
+  {
+    id:"r1", level:"HSK 1", title:"自我介绍 — Самопредставление",
+    text:"我叫王明。我是中国人。我在北京工作。我会说一点儿英语。我喜欢喝茶。你好！",
+    pinyin:"Wǒ jiào Wáng Míng. Wǒ shì Zhōngguó rén. Wǒ zài Běijīng gōngzuò. Wǒ huì shuō yīdiǎnr Yīngyǔ. Wǒ xǐhuān hē chá. Nǐ hǎo!",
+    translation:"Меня зовут Ван Мин. Я китаец. Я работаю в Пекине. Я немного умею говорить по-английски. Мне нравится пить чай. Привет!",
+    words:["叫 jiào — называться","中国人 Zhōngguó rén — китаец","一点儿 yīdiǎnr — немного"]
+  },
+  {
+    id:"r2", level:"HSK 1", title:"在商店 — В магазине",
+    text:"这个多少钱？五十元。太贵了！可以便宜一点吗？好，四十五元。谢谢！",
+    pinyin:"Zhège duōshǎo qián? Wǔshí yuán. Tài guì le! Kěyǐ piányí yīdiǎn ma? Hǎo, sìshíwǔ yuán. Xièxiè!",
+    translation:"Сколько это стоит? Пятьдесят юаней. Слишком дорого! Можно немного дешевле? Хорошо, сорок пять юаней. Спасибо!",
+    words:["多少钱 duōshǎo qián — сколько стоит","太…了 tài…le — слишком","一点 yīdiǎn — немного"]
+  },
+  {
+    id:"r3", level:"HSK 1", title:"问路 — Спрашиваем дорогу",
+    text:"请问，地铁站在哪里？在前面，向左走，然后向右。远吗？不远，走五分钟就到了。",
+    pinyin:"Qǐngwèn, dìtiě zhàn zài nǎlǐ? Zài qiánmiàn, xiàng zuǒ zǒu, ránhòu xiàng yòu. Yuǎn ma? Bù yuǎn, zǒu wǔ fēnzhōng jiù dào le.",
+    translation:"Скажите пожалуйста, где станция метро? Впереди, поверните налево, потом направо. Далеко? Недалеко, идти пять минут и уже там.",
+    words:["地铁站 dìtiě zhàn — станция метро","向左/右 xiàng zuǒ/yòu — налево/направо","就到了 jiù dào le — уже там (вот-вот)"]
+  },
+  {
+    id:"r4", level:"HSK 2", title:"商务邮件 — Деловое письмо",
+    text:"王总，您好！感谢您对我们产品的关注。我们的产品质量很好，价格合理。如果您有兴趣，我们可以安排一次会议。请告诉我您方便的时间。期待您的回复！",
+    pinyin:"Wáng zǒng, nín hǎo! Gǎnxiè nín duì wǒmen chǎnpǐn de guānzhù. Wǒmen de chǎnpǐn zhìliàng hěn hǎo, jiàgé hélǐ. Rúguǒ nín yǒu xìngqù, wǒmen kěyǐ ānpái yīcì huìyì. Qǐng gàosu wǒ nín fāngbiàn de shíjiān. Qīdài nín de huífù!",
+    translation:"Господин Ван, здравствуйте! Благодарим за интерес к нашей продукции. Качество нашей продукции очень высокое, цена разумная. Если вас это интересует, мы можем организовать встречу. Пожалуйста, сообщите удобное вам время. Ждём вашего ответа!",
+    words:["总 zǒng — директор (уважит.)", "感谢 gǎnxiè — благодарить","合理 hélǐ — разумный","期待 qīdài — ожидать с нетерпением"]
+  },
+  {
+    id:"r5", level:"HSK 2", title:"谈价格 — Обсуждение цены",
+    text:"您好，我想了解一下你们的产品价格。我们的价格是每件一百元。如果订购一千件，可以打八折。好的，我们需要考虑一下，明天给你答复。",
+    pinyin:"Nín hǎo, wǒ xiǎng liǎojiě yīxià nǐmen de chǎnpǐn jiàgé. Wǒmen de jiàgé shì měi jiàn yī bǎi yuán. Rúguǒ dìnggòu yī qiān jiàn, kěyǐ dǎ bā zhé. Hǎo de, wǒmen xūyào kǎolǜ yīxià, míngtiān gěi nǐ dáfù.",
+    translation:"Здравствуйте, я хотел бы узнать цены на вашу продукцию. Наша цена — сто юаней за штуку. Если заказать тысячу штук, можем дать скидку 20%. Хорошо, нам нужно подумать, завтра дадим вам ответ.",
+    words:["了解 liǎojiě — узнать; понять","订购 dìnggòu — заказывать","打八折 dǎ bā zhé — скидка 20% (платишь 80%)","答复 dáfù — ответ; дать ответ"]
+  },
 ];
 
 // ── State ──────────────────────────────────────────────────────
@@ -1293,6 +1355,134 @@ function renderHanzi(){
 function setHanziTab(tab){ state.hanziTab = tab; renderHanzi(); }
 
 
+
+// ── Radicals ──────────────────────────────────────────────────
+function renderRadicals(){
+  document.getElementById('radicals').innerHTML = `
+    <div class="card" style="margin-bottom:16px">
+      <div class="section-title">部首 — Радикалы иероглифов</div>
+      <div class="notice gold">
+        💡 Радикал — это ключевой элемент иероглифа, указывающий на его смысловую группу. Зная 50 основных радикалов, ты сможешь угадывать значение сотен незнакомых иероглифов.
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
+      ${radicalsData.map(r=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+            <div style="font-size:42px;font-weight:900;color:var(--primary);cursor:pointer;min-width:52px;text-align:center" onclick="speakChinese('${esc(r.radical.split(' ')[0])}')">${esc(r.radical)}</div>
+            <div>
+              <div style="font-weight:800;font-size:15px">${esc(r.meaning)}</div>
+              <div class="pinyin-sm">${esc(r.pinyin||r.phonyin||'')}</div>
+              <div class="small-muted" style="margin-top:3px">💡 ${esc(r.tip)}</div>
+            </div>
+          </div>
+          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Иероглифы с этим радикалом:</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            ${r.examples.map(e=>`
+              <div style="text-align:center;padding:8px 12px;border:1px solid var(--line);border-radius:var(--radius-xs);cursor:pointer" onclick="speakChinese('${esc(e.h)}')">
+                <div style="font-size:22px;font-weight:900;color:var(--primary)">${esc(e.h)}</div>
+                <div class="pinyin-sm">${esc(e.p)}</div>
+                <div style="font-size:11px;color:var(--muted)">${esc(e.m)}</div>
+              </div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ── Reading HSK ────────────────────────────────────────────────
+function renderReading(){
+  const active = state.activeReading || null;
+  const text = active ? readingTexts.find(t=>t.id===active) : null;
+
+  document.getElementById('reading').innerHTML = `
+    <div class="grid-2" style="grid-template-columns:240px 1fr;align-items:start">
+      <div class="card" style="padding:14px">
+        <div class="section-title" style="margin-bottom:12px">Тексты для чтения</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${readingTexts.map(t=>`
+            <button onclick="setActiveReading('${t.id}')"
+              style="text-align:left;padding:10px 12px;border-radius:var(--radius-xs);border:1px solid ${active===t.id?'var(--primary)':'var(--line)'};background:${active===t.id?'var(--primary-soft)':'transparent'};cursor:pointer;font:inherit;color:var(--text)">
+              <div style="font-size:13px;font-weight:700;color:${active===t.id?'var(--primary-text)':'var(--text)'}">${esc(t.title)}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">
+                <span style="background:${t.level==='HSK 1'?'#eff6ff':'#f0fdf4'};color:${t.level==='HSK 1'?'#2563eb':'#16a34a'};padding:1px 7px;border-radius:99px">${t.level}</span>
+              </div>
+            </button>`).join('')}
+        </div>
+      </div>
+
+      <div>
+        ${!text ? `
+          <div class="card" style="text-align:center;padding:48px 24px">
+            <div style="font-size:52px;margin-bottom:14px">📖</div>
+            <div style="font-size:18px;font-weight:800;margin-bottom:8px">Выбери текст слева</div>
+            <div class="small-muted">5 текстов уровня HSK 1-2 — от самопредставления до делового письма</div>
+          </div>` : `
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+              <div>
+                <div class="section-title">${esc(text.title)}</div>
+                <span style="background:${text.level==='HSK 1'?'#eff6ff':'#f0fdf4'};color:${text.level==='HSK 1'?'#2563eb':'#16a34a'};padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">${text.level}</span>
+              </div>
+              <button class="btn secondary small" onclick="speakChinese(${safeJson(text.text)})">🔊 Озвучить</button>
+            </div>
+
+            <div style="font-size:20px;line-height:2;padding:20px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid var(--line)">
+              ${esc(text.text)}
+            </div>
+
+            <div style="margin-bottom:14px">
+              <button class="btn secondary small" onclick="toggleReadingSection('pinyin')" style="margin-right:8px">
+                ${(state.showReadingPinyin||{})[text.id]?'Скрыть пиньинь':'Показать пиньинь'}
+              </button>
+              <button class="btn secondary small" onclick="toggleReadingSection('translation')">
+                ${(state.showReadingTranslation||{})[text.id]?'Скрыть перевод':'Показать перевод'}
+              </button>
+            </div>
+
+            ${(state.showReadingPinyin||{})[text.id]?`
+              <div style="font-size:14px;line-height:1.9;padding:14px;background:var(--gold-soft);border-radius:var(--radius-sm);margin-bottom:10px;color:var(--gold-text);border:1px solid #fcd34d">
+                ${esc(text.pinyin)}
+              </div>`:``}
+
+            ${(state.showReadingTranslation||{})[text.id]?`
+              <div style="font-size:14px;line-height:1.75;padding:14px;background:var(--primary-soft);border-radius:var(--radius-sm);margin-bottom:10px;color:var(--primary-text);border:1px solid #fca5a5">
+                ${esc(text.translation)}
+              </div>`:``}
+
+            <div>
+              <div style="font-size:13px;font-weight:800;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">🔑 Ключевые слова</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
+                ${text.words.map(w=>`
+                  <div style="padding:8px 12px;border:1px solid var(--line);border-radius:var(--radius-xs);font-size:13px;line-height:1.5">
+                    <span style="font-weight:700;color:var(--primary)">${esc(w.split(' — ')[0])}</span>
+                    <span style="color:var(--muted)"> — ${esc(w.split(' — ')[1]||'')}</span>
+                  </div>`).join('')}
+              </div>
+            </div>
+            <div class="notice" style="margin-top:14px">💡 Метод: сначала читай только иероглифы, пытаясь понять смысл. Потом открой пиньинь. Перевод — только для проверки.</div>
+          </div>`}
+      </div>
+    </div>`;
+}
+function setActiveReading(id){
+  state.activeReading = id;
+  state.showReadingPinyin = {};
+  state.showReadingTranslation = {};
+  renderReading();
+}
+function toggleReadingSection(type){
+  const id = state.activeReading;
+  if(!id) return;
+  if(type==='pinyin'){
+    if(!state.showReadingPinyin) state.showReadingPinyin = {};
+    state.showReadingPinyin[id] = !state.showReadingPinyin[id];
+  } else {
+    if(!state.showReadingTranslation) state.showReadingTranslation = {};
+    state.showReadingTranslation[id] = !state.showReadingTranslation[id];
+  }
+  renderReading();
+}
+
 // ── Init ───────────────────────────────────────────────────────
 function renderAll(){
   renderTabs();
@@ -1306,6 +1496,8 @@ function renderAll(){
   renderPhrases();
   renderMeasure();
   renderHanzi();
+  renderRadicals();
+  renderReading();
   const saved=localStorage.getItem('zh_theme')||'light';
   const btn=document.getElementById('theme-btn');
   if(btn) btn.textContent=saved==='dark'?'☀️ Светлая':'🌙 Тёмная';
