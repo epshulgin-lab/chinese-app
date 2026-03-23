@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Приложение для изучения китайского языка — иероглифы, пиньинь, тоны, грамматика, SRS повторение."/>
+  <title>Chinese Learning App 汉语学习</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f5f0eb; --card:#ffffff; --text:#1a1a2e; --muted:#7c7c8a;
+      --line:#e8e0d8; --line-hover:#d4c8bc;
+      --primary:#c0392b; --primary-dark:#a93226; --primary-soft:#fdf2f0; --primary-text:#922b21;
+      --gold:#d4a017; --gold-soft:#fefce8; --gold-text:#854d0e;
+      --green:#15803d; --green-soft:#f0fdf4;
+      --shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.05);
+      --shadow-lg:0 4px 6px rgba(0,0,0,.04),0 20px 40px rgba(0,0,0,.08);
+      --shadow-sm:0 1px 2px rgba(0,0,0,.05);
+      --radius:16px; --radius-sm:12px; --radius-xs:8px;
+    }
+    [data-theme="dark"]{
+      --bg:#12100e; --card:#1c1917; --text:#f5f0eb; --muted:#a8a29e;
+      --line:#2d2926; --line-hover:#3d3733;
+      --primary:#e05444; --primary-dark:#c0392b; --primary-soft:#2d1a17; --primary-text:#fca5a5;
+      --gold:#f59e0b; --gold-soft:#1c1400; --gold-text:#fcd34d;
+      --green:#22c55e; --green-soft:#0d2e1a;
+      --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+      --shadow-lg:0 4px 6px rgba(0,0,0,.25),0 20px 40px rgba(0,0,0,.4);
+      --shadow-sm:0 1px 2px rgba(0,0,0,.2);
+    }
+    [data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] select{background:var(--card);color:var(--text);border-color:var(--line)}
+    [data-theme="dark"] .btn.secondary{background:var(--card);color:var(--text)}
+    [data-theme="dark"] .word-card,[data-theme="dark"] .item-card,[data-theme="dark"] .resource-card{background:var(--card)}
+    [data-theme="dark"] .notice{background:var(--primary-soft);border-color:#4a1a17;color:var(--primary-text)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased}
+    .container{max-width:1280px;margin:0 auto;padding:20px}
+    .hero{
+      background:linear-gradient(135deg,#8b0000 0%,#c0392b 40%,#d4a017 100%);
+      border-radius:var(--radius);padding:28px 32px;margin-bottom:20px;
+      color:#fff;position:relative;overflow:hidden;
+      box-shadow:0 4px 24px rgba(192,57,43,.3);
+    }
+    .hero::before{content:"";position:absolute;top:-20%;right:5%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 70%);pointer-events:none}
+    .hero-char{position:absolute;right:32px;top:50%;transform:translateY(-50%);font-size:96px;opacity:.12;line-height:1;font-weight:900;pointer-events:none}
+    .hero *{position:relative;z-index:1}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;transition:box-shadow .2s,border-color .2s}
+    .card:hover{box-shadow:var(--shadow-lg);border-color:var(--line-hover)}
+    h1{margin:0 0 8px;font-size:clamp(22px,3vw,32px);font-weight:900;line-height:1.15;letter-spacing:-.025em}
+    h3{margin:0;letter-spacing:-.02em}
+    .hero-muted{color:rgba(255,255,255,.85);font-size:14px;line-height:1.6}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .badge{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;backdrop-filter:blur(8px)}
+    .tabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 20px;background:var(--card);padding:6px;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+    .tab{border:none;background:transparent;border-radius:var(--radius-sm);padding:9px 15px;cursor:pointer;font-weight:700;font-size:13px;color:var(--muted);transition:all .18s;font-family:inherit}
+    .tab:hover{background:var(--bg);color:var(--text)}
+    .tab.active{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(192,57,43,.3)}
+    .tab-pane{display:none}
+    .tab-pane.active{display:block;animation:fadeSlide .22s ease}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-2{display:grid;grid-template-columns:1fr 1.4fr;gap:16px}
+    .grid-2-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .metric .label{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .metric .value{font-size:32px;font-weight:900;margin:10px 0 4px;letter-spacing:-.02em}
+    .progress{height:8px;background:var(--bg);border-radius:999px;overflow:hidden;margin-top:10px}
+    .bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--gold));border-radius:999px;transition:width .4s}
+    label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+    input,textarea,select{width:100%;padding:10px 13px;border-radius:var(--radius-xs);border:1.5px solid var(--line);background:var(--card);font:inherit;font-size:14px;color:var(--text);transition:border-color .15s,box-shadow .15s}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+    textarea{min-height:80px;resize:vertical}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;background:var(--primary);color:#fff;font-weight:700;font-size:14px;padding:10px 18px;border-radius:var(--radius-xs);cursor:pointer;transition:all .15s;box-shadow:0 1px 3px rgba(192,57,43,.2);font-family:inherit}
+    .btn:hover{background:var(--primary-dark);box-shadow:0 4px 12px rgba(192,57,43,.25);transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.secondary{background:var(--card);color:var(--text);border:1.5px solid var(--line);box-shadow:var(--shadow-sm)}
+    .btn.secondary:hover{background:var(--bg);border-color:var(--line-hover)}
+    .btn.soft{background:var(--primary-soft);color:var(--primary-text);box-shadow:none}
+    .btn.gold{background:var(--gold);color:#fff;box-shadow:0 1px 3px rgba(212,160,23,.3)}
+    .btn.gold:hover{background:#b8860b}
+    .btn.small{padding:6px 12px;font-size:12px}
+    .btn.danger{background:#fef2f2;color:#dc2626;border:1.5px solid #fecaca;box-shadow:none}
+    .section-title{margin:0 0 16px;font-size:17px;font-weight:800;letter-spacing:-.015em}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .word-card,.item-card,.resource-card{border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px;background:var(--card);transition:all .15s}
+    .item-card:hover,.word-card:hover{border-color:var(--line-hover);box-shadow:var(--shadow)}
+    .chips{display:flex;gap:6px;flex-wrap:wrap}
+    .chip,.pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
+    .button-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .small-muted{font-size:13px;color:var(--muted)}
+    .notice{padding:13px 15px;border:1px solid #fca5a5;background:var(--primary-soft);border-radius:var(--radius-sm);font-size:13px;color:var(--primary-text);line-height:1.5}
+    .notice.gold{border-color:#fcd34d;background:var(--gold-soft);color:var(--gold-text)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .mini-box{padding:14px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+    .mini-box strong{display:block;font-size:24px;margin-top:6px;color:var(--text);letter-spacing:-.02em;font-weight:900}
+
+    /* Chinese specific */
+    .hanzi{font-size:52px;font-weight:900;line-height:1.1;color:var(--primary);letter-spacing:.05em}
+    .hanzi-large{font-size:80px;font-weight:900;line-height:1;color:var(--primary);letter-spacing:.05em}
+    .pinyin{font-size:18px;font-weight:700;color:var(--gold);letter-spacing:.05em}
+    .pinyin-sm{font-size:14px;font-weight:700;color:var(--gold)}
+    .tone-1{color:#2563eb} /* flat ā */
+    .tone-2{color:#16a34a} /* rising á */
+    .tone-3{color:#d97706} /* dipping ǎ */
+    .tone-4{color:#dc2626} /* falling à */
+    .tone-5{color:var(--muted)} /* neutral a */
+    .tone-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:900;color:#fff}
+    .t1{background:#2563eb}.t2{background:#16a34a}.t3{background:#d97706}.t4{background:#dc2626}.t5{background:var(--muted)}
+    .stroke-order{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .flash-hanzi{font-size:72px;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--primary),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.05em}
+    .review-card{min-height:300px;display:flex;flex-direction:column;justify-content:space-between;border:1.5px solid var(--line);border-radius:var(--radius);padding:26px;background:linear-gradient(180deg,var(--card),var(--bg));box-shadow:var(--shadow)}
+    .grammar-grid{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start}
+    .grammar-nav{display:flex;flex-direction:column;gap:4px}
+    .grammar-nav-item{padding:9px 13px;border-radius:var(--radius-xs);border:none;background:transparent;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--muted);text-align:left;transition:all .15s}
+    .grammar-nav-item:hover{background:var(--bg);color:var(--text)}
+    .grammar-nav-item.active{background:var(--primary-soft);color:var(--primary-text)}
+    .grammar-nav-cat{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:10px 13px 4px}
+    .grammar-content{display:none}
+    .grammar-content.active{display:block;animation:fadeSlide .2s ease}
+    .rule-block{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;background:var(--card);margin-bottom:12px}
+    .rule-block h4{font-size:14px;font-weight:800;margin-bottom:10px}
+    .rule-block p{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:8px}
+    .rule-formula{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius-xs);padding:10px 14px;font-size:13px;font-weight:700;font-family:'Courier New',monospace;margin:8px 0}
+    .rule-example{background:var(--primary-soft);border:1px solid #fca5a5;border-radius:var(--radius-xs);padding:10px 14px;font-size:14px;margin-top:8px;line-height:1.8}
+    .rule-example .ch{font-size:18px;font-weight:800;color:var(--primary)}
+    .rule-example .py{font-size:13px;color:var(--gold);font-weight:700}
+    .rule-example .ru{font-size:13px;color:var(--muted)}
+    .theme-toggle{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:var(--radius-xs);padding:7px 14px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;backdrop-filter:blur(8px);transition:all .15s}
+    .theme-toggle:hover{background:rgba(255,255,255,.25)}
+    .verb-table{width:100%;border-collapse:collapse;font-size:13px}
+    .verb-table th{background:var(--bg);border:1px solid var(--line);padding:9px 12px;font-weight:700;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;text-align:left}
+    .verb-table td{border:1px solid var(--line);padding:9px 12px;transition:background .1s}
+    .verb-table tr:hover td{background:var(--primary-soft)}
+    .table-wrapper{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--line)}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:980px){
+      .container{padding:12px}
+      .grid-3,.kpis{grid-template-columns:1fr}
+      .grid-2,.grid-2-equal{grid-template-columns:1fr}
+      .grammar-grid{grid-template-columns:1fr}
+      h1{font-size:22px}
+      .tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+      .tabs::-webkit-scrollbar{display:none}
+      .tab{padding:8px 12px;white-space:nowrap}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none !important;transition:none !important}}
+  </style>
+</head>
+<body>
+<div class="container">
+  <section class="hero">
+    <div class="hero-char">汉</div>
+    <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap">
+      <div>
+        <h1>Chinese Learning System 汉语学习</h1>
+        <div class="hero-muted">Иероглифы, пиньинь, тоны, словарь HSK, грамматика, SRS-повторение и разговорные фразы.</div>
+        <div class="badges">
+          <span class="badge">HSK 1 → HSK 3</span>
+          <span class="badge">普通话 Мандаринский</span>
+          <span class="badge">С нуля</span>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">🌙 Тёмная</button>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs"></div>
+  <section id="dashboard" class="tab-pane active"></section>
+  <section id="tones" class="tab-pane"></section>
+  <section id="dictionary" class="tab-pane"></section>
+  <section id="review" class="tab-pane"></section>
+  <section id="quiz" class="tab-pane"></section>
+  <section id="grammar" class="tab-pane"></section>
+  <section id="phrases" class="tab-pane"></section>
+  <section id="measure" class="tab-pane"></section>
+</div>
+
+<script>
+const STORAGE = {
+  dictionary: 'zh_dictionary_v1',
+  tracker: 'zh_tracker_v1',
+  settings: 'zh_settings_v1',
+};
+
+const defaultSettings = { weeklyWordsGoal: 50, weeklyPracticeGoal: 60 };
+
+// ── Starter words (HSK 1-2 core) ──────────────────────────────
+const starterWords = [
+  // Приветствия и базовые фразы
+  {hanzi:"你好",pinyin:"nǐ hǎo",tone:"3-3",translation:"Привет; Здравствуйте",example:"你好！很高兴认识你。",examplePinyin:"Nǐ hǎo! Hěn gāoxìng rènshi nǐ.",exampleTranslation:"Привет! Рад познакомиться.",category:"👋 Приветствия",hsk:1},
+  {hanzi:"谢谢",pinyin:"xiè xie",tone:"4-5",translation:"Спасибо",example:"谢谢你的帮助。",examplePinyin:"Xièxie nǐ de bāngzhù.",exampleTranslation:"Спасибо за вашу помощь.",category:"👋 Приветствия",hsk:1},
+  {hanzi:"再见",pinyin:"zài jiàn",tone:"4-4",translation:"До свидания",example:"明天见，再见！",examplePinyin:"Míngtiān jiàn, zàijiàn!",exampleTranslation:"До встречи завтра, пока!",category:"👋 Приветствия",hsk:1},
+  {hanzi:"对不起",pinyin:"duì bu qǐ",tone:"4-5-3",translation:"Извините; Прошу прощения",example:"对不起，我来晚了。",examplePinyin:"Duìbuqǐ, wǒ lái wǎn le.",exampleTranslation:"Извините, я опоздал.",category:"👋 Приветствия",hsk:1},
+  {hanzi:"没关系",pinyin:"méi guān xi",tone:"2-1-5",translation:"Ничего; Всё в порядке",example:"没关系，不用担心。",examplePinyin:"Méi guānxi, bú yòng dānxīn.",exampleTranslation:"Ничего, не беспокойтесь.",category:"👋 Приветствия",hsk:1},
+  {hanzi:"请问",pinyin:"qǐng wèn",tone:"3-4",translation:"Позвольте спросить; Скажите пожалуйста",example:"请问，洗手间在哪里？",examplePinyin:"Qǐngwèn, xǐshǒujiān zài nǎlǐ?",exampleTranslation:"Скажите пожалуйста, где туалет?",category:"👋 Приветствия",hsk:1},
+
+  // Местоимения
+  {hanzi:"我",pinyin:"wǒ",tone:"3",translation:"Я",example:"我是俄罗斯人。",examplePinyin:"Wǒ shì Éluósī rén.",exampleTranslation:"Я русский.",category:"👤 Местоимения",hsk:1},
+  {hanzi:"你",pinyin:"nǐ",tone:"3",translation:"Ты",example:"你叫什么名字？",examplePinyin:"Nǐ jiào shénme míngzi?",exampleTranslation:"Как тебя зовут?",category:"👤 Местоимения",hsk:1},
+  {hanzi:"他",pinyin:"tā",tone:"1",translation:"Он",example:"他是我的朋友。",examplePinyin:"Tā shì wǒ de péngyou.",exampleTranslation:"Он мой друг.",category:"👤 Местоимения",hsk:1},
+  {hanzi:"她",pinyin:"tā",tone:"1",translation:"Она",example:"她在哪里工作？",examplePinyin:"Tā zài nǎlǐ gōngzuò?",exampleTranslation:"Где она работает?",category:"👤 Местоимения",hsk:1},
+  {hanzi:"我们",pinyin:"wǒ men",tone:"3-5",translation:"Мы",example:"我们是好朋友。",examplePinyin:"Wǒmen shì hǎo péngyou.",exampleTranslation:"Мы хорошие друзья.",category:"👤 Местоимения",hsk:1},
+  {hanzi:"他们",pinyin:"tā men",tone:"1-5",translation:"Они",example:"他们都说中文。",examplePinyin:"Tāmen dōu shuō Zhōngwén.",exampleTranslation:"Они все говорят по-китайски.",category:"👤 Местоимения",hsk:1},
+
+  // Числа
+  {hanzi:"一",pinyin:"yī",tone:"1",translation:"Один (1)",example:"我有一个苹果。",examplePinyin:"Wǒ yǒu yī ge píngguǒ.",exampleTranslation:"У меня есть одно яблоко.",category:"🔢 Числа",hsk:1},
+  {hanzi:"二",pinyin:"èr",tone:"4",translation:"Два (2)",example:"我有两个孩子。",examplePinyin:"Wǒ yǒu liǎng ge háizi.",exampleTranslation:"У меня двое детей.",category:"🔢 Числа",hsk:1},
+  {hanzi:"三",pinyin:"sān",tone:"1",translation:"Три (3)",example:"我们需要三个人。",examplePinyin:"Wǒmen xūyào sān ge rén.",exampleTranslation:"Нам нужно три человека.",category:"🔢 Числа",hsk:1},
+  {hanzi:"四",pinyin:"sì",tone:"4",translation:"Четыре (4)",example:"今天是四月四号。",examplePinyin:"Jīntiān shì sì yuè sì hào.",exampleTranslation:"Сегодня четвёртое апреля.",category:"🔢 Числа",hsk:1},
+  {hanzi:"五",pinyin:"wǔ",tone:"3",translation:"Пять (5)",example:"我工作了五年。",examplePinyin:"Wǒ gōngzuò le wǔ nián.",exampleTranslation:"Я работаю уже пять лет.",category:"🔢 Числа",hsk:1},
+  {hanzi:"十",pinyin:"shí",tone:"2",translation:"Десять (10)",example:"我有十块钱。",examplePinyin:"Wǒ yǒu shí kuài qián.",exampleTranslation:"У меня есть десять юаней.",category:"🔢 Числа",hsk:1},
+  {hanzi:"百",pinyin:"bǎi",tone:"3",translation:"Сто (100)",example:"这个东西要一百元。",examplePinyin:"Zhège dōngxi yào yī bǎi yuán.",exampleTranslation:"Эта вещь стоит сто юаней.",category:"🔢 Числа",hsk:1},
+  {hanzi:"千",pinyin:"qiān",tone:"1",translation:"Тысяча (1000)",example:"这件衣服要两千元。",examplePinyin:"Zhè jiàn yīfu yào liǎng qiān yuán.",exampleTranslation:"Эта одежда стоит две тысячи юаней.",category:"🔢 Числа",hsk:2},
+
+  // Время
+  {hanzi:"今天",pinyin:"jīn tiān",tone:"1-1",translation:"Сегодня",example:"今天天气很好。",examplePinyin:"Jīntiān tiānqì hěn hǎo.",exampleTranslation:"Сегодня хорошая погода.",category:"📅 Время",hsk:1},
+  {hanzi:"明天",pinyin:"míng tiān",tone:"2-1",translation:"Завтра",example:"我明天有会议。",examplePinyin:"Wǒ míngtiān yǒu huìyì.",exampleTranslation:"Завтра у меня совещание.",category:"📅 Время",hsk:1},
+  {hanzi:"昨天",pinyin:"zuó tiān",tone:"2-1",translation:"Вчера",example:"昨天我去了北京。",examplePinyin:"Zuótiān wǒ qù le Běijīng.",exampleTranslation:"Вчера я ездил в Пекин.",category:"📅 Время",hsk:1},
+  {hanzi:"现在",pinyin:"xiàn zài",tone:"4-4",translation:"Сейчас; Сейчас",example:"现在几点？",examplePinyin:"Xiànzài jǐ diǎn?",exampleTranslation:"Который сейчас час?",category:"📅 Время",hsk:1},
+  {hanzi:"年",pinyin:"nián",tone:"2",translation:"Год",example:"今年是2024年。",examplePinyin:"Jīnnián shì èr líng èr sì nián.",exampleTranslation:"Этот год — 2024.",category:"📅 Время",hsk:1},
+  {hanzi:"月",pinyin:"yuè",tone:"4",translation:"Месяц; Луна",example:"这个月我很忙。",examplePinyin:"Zhège yuè wǒ hěn máng.",exampleTranslation:"В этом месяце я очень занят.",category:"📅 Время",hsk:1},
+  {hanzi:"星期",pinyin:"xīng qī",tone:"1-1",translation:"Неделя",example:"这个星期我在上海。",examplePinyin:"Zhège xīngqī wǒ zài Shànghǎi.",exampleTranslation:"На этой неделе я в Шанхае.",category:"📅 Время",hsk:1},
+
+  // Глаголы
+  {hanzi:"是",pinyin:"shì",tone:"4",translation:"Быть; Являться (связка)",example:"我是老师。",examplePinyin:"Wǒ shì lǎoshī.",exampleTranslation:"Я учитель.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"有",pinyin:"yǒu",tone:"3",translation:"Иметь; Есть (наличие)",example:"我有一个问题。",examplePinyin:"Wǒ yǒu yī ge wèntí.",exampleTranslation:"У меня есть один вопрос.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"说",pinyin:"shuō",tone:"1",translation:"Говорить; Сказать",example:"你会说中文吗？",examplePinyin:"Nǐ huì shuō Zhōngwén ma?",exampleTranslation:"Ты умеешь говорить по-китайски?",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"吃",pinyin:"chī",tone:"1",translation:"Есть; Кушать",example:"你喜欢吃什么？",examplePinyin:"Nǐ xǐhuān chī shénme?",exampleTranslation:"Что ты любишь есть?",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"喝",pinyin:"hē",tone:"1",translation:"Пить",example:"我想喝一杯茶。",examplePinyin:"Wǒ xiǎng hē yī bēi chá.",exampleTranslation:"Я хочу выпить чашку чая.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"去",pinyin:"qù",tone:"4",translation:"Идти; Ехать (направление к)",example:"我们去吃饭吧。",examplePinyin:"Wǒmen qù chīfàn ba.",exampleTranslation:"Давайте пойдём поедим.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"来",pinyin:"lái",tone:"2",translation:"Прийти; Приехать (направление от)",example:"请进来！",examplePinyin:"Qǐng jìnlái!",exampleTranslation:"Пожалуйста, входите!",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"工作",pinyin:"gōng zuò",tone:"1-4",translation:"Работать; Работа",example:"我在一家公司工作。",examplePinyin:"Wǒ zài yī jiā gōngsī gōngzuò.",exampleTranslation:"Я работаю в одной компании.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"学习",pinyin:"xué xí",tone:"2-2",translation:"Учиться; Изучать",example:"我每天学习汉语。",examplePinyin:"Wǒ měitiān xuéxí Hànyǔ.",exampleTranslation:"Я каждый день учу китайский.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"知道",pinyin:"zhī dào",tone:"1-4",translation:"Знать; Понимать",example:"你知道他住在哪里吗？",examplePinyin:"Nǐ zhīdào tā zhù zài nǎlǐ ma?",exampleTranslation:"Ты знаешь, где он живёт?",category:"🔤 Глаголы",hsk:2},
+  {hanzi:"喜欢",pinyin:"xǐ huān",tone:"3-1",translation:"Нравиться; Любить",example:"我喜欢学习中文。",examplePinyin:"Wǒ xǐhuān xuéxí Zhōngwén.",exampleTranslation:"Мне нравится учить китайский.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"想",pinyin:"xiǎng",tone:"3",translation:"Хотеть; Думать; Скучать",example:"我想去中国旅行。",examplePinyin:"Wǒ xiǎng qù Zhōngguó lǚxíng.",exampleTranslation:"Я хочу поехать путешествовать в Китай.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"可以",pinyin:"kě yǐ",tone:"3-3",translation:"Можно; Мочь (разрешение)",example:"我可以问一个问题吗？",examplePinyin:"Wǒ kěyǐ wèn yī ge wèntí ma?",exampleTranslation:"Можно задать один вопрос?",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"会",pinyin:"huì",tone:"4",translation:"Уметь; Мочь (умение)",example:"我会说一点儿中文。",examplePinyin:"Wǒ huì shuō yīdiǎnr Zhōngwén.",exampleTranslation:"Я немного умею говорить по-китайски.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"看",pinyin:"kàn",tone:"4",translation:"Смотреть; Читать",example:"我喜欢看中国电影。",examplePinyin:"Wǒ xǐhuān kàn Zhōngguó diànyǐng.",exampleTranslation:"Я люблю смотреть китайские фильмы.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"听",pinyin:"tīng",tone:"1",translation:"Слушать",example:"请听我说。",examplePinyin:"Qǐng tīng wǒ shuō.",exampleTranslation:"Пожалуйста, послушай меня.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"买",pinyin:"mǎi",tone:"3",translation:"Покупать",example:"我想买一件礼物。",examplePinyin:"Wǒ xiǎng mǎi yī jiàn lǐwù.",exampleTranslation:"Я хочу купить один подарок.",category:"🔤 Глаголы",hsk:1},
+  {hanzi:"卖",pinyin:"mài",tone:"4",translation:"Продавать",example:"这里卖很多中国产品。",examplePinyin:"Zhèlǐ mài hěn duō Zhōngguó chǎnpǐn.",exampleTranslation:"Здесь продаётся много китайских товаров.",category:"🔤 Глаголы",hsk:2},
+
+  // Прилагательные
+  {hanzi:"好",pinyin:"hǎo",tone:"3",translation:"Хороший; Хорошо",example:"这个方案很好。",examplePinyin:"Zhège fāng'àn hěn hǎo.",exampleTranslation:"Этот план очень хороший.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"大",pinyin:"dà",tone:"4",translation:"Большой",example:"上海是一个很大的城市。",examplePinyin:"Shànghǎi shì yī ge hěn dà de chéngshì.",exampleTranslation:"Шанхай — очень большой город.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"小",pinyin:"xiǎo",tone:"3",translation:"Маленький",example:"这个问题不小。",examplePinyin:"Zhège wèntí bù xiǎo.",exampleTranslation:"Эта проблема немаленькая.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"多",pinyin:"duō",tone:"1",translation:"Много",example:"这里有很多机会。",examplePinyin:"Zhèlǐ yǒu hěn duō jīhuì.",exampleTranslation:"Здесь много возможностей.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"少",pinyin:"shǎo",tone:"3",translation:"Мало; Немного",example:"时间不多，只有少数几分钟。",examplePinyin:"Shíjiān bù duō, zhǐyǒu shǎoshù jǐ fēnzhōng.",exampleTranslation:"Времени немного, всего несколько минут.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"贵",pinyin:"guì",tone:"4",translation:"Дорогой (по цене)",example:"这个产品太贵了。",examplePinyin:"Zhège chǎnpǐn tài guì le.",exampleTranslation:"Этот продукт слишком дорогой.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"便宜",pinyin:"pián yi",tone:"2-5",translation:"Дешёвый; Недорогой",example:"这里的东西比较便宜。",examplePinyin:"Zhèlǐ de dōngxi bǐjiào piányí.",exampleTranslation:"Вещи здесь относительно дешёвые.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"忙",pinyin:"máng",tone:"2",translation:"Занятый; Быть занятым",example:"最近我非常忙。",examplePinyin:"Zuìjìn wǒ fēicháng máng.",exampleTranslation:"В последнее время я очень занят.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"快",pinyin:"kuài",tone:"4",translation:"Быстрый; Быстро",example:"请快一点儿，我们要迟到了。",examplePinyin:"Qǐng kuài yīdiǎnr, wǒmen yào chídào le.",exampleTranslation:"Пожалуйста, побыстрее — мы опаздываем.",category:"📝 Прилагательные",hsk:1},
+  {hanzi:"慢",pinyin:"màn",tone:"4",translation:"Медленный; Медленно",example:"请说慢一点儿，谢谢。",examplePinyin:"Qǐng shuō màn yīdiǎnr, xièxie.",exampleTranslation:"Пожалуйста, говорите помедленнее, спасибо.",category:"📝 Прилагательные",hsk:1},
+
+  // Бизнес и торговля
+  {hanzi:"公司",pinyin:"gōng sī",tone:"1-1",translation:"Компания; Фирма",example:"我们公司主要做出口业务。",examplePinyin:"Wǒmen gōngsī zhǔyào zuò chūkǒu yèwù.",exampleTranslation:"Наша компания в основном занимается экспортным бизнесом.",category:"💼 Бизнес",hsk:2},
+  {hanzi:"合作",pinyin:"hé zuò",tone:"2-4",translation:"Сотрудничество; Сотрудничать",example:"我们希望建立长期合作关系。",examplePinyin:"Wǒmen xīwàng jiànlì chángqī hézuò guānxi.",exampleTranslation:"Мы надеемся установить долгосрочные отношения сотрудничества.",category:"💼 Бизнес",hsk:3},
+  {hanzi:"价格",pinyin:"jià gé",tone:"4-2",translation:"Цена",example:"这个价格可以接受吗？",examplePinyin:"Zhège jiàgé kěyǐ jiēshòu ma?",exampleTranslation:"Эта цена приемлема?",category:"💼 Бизнес",hsk:3},
+  {hanzi:"质量",pinyin:"zhì liàng",tone:"4-4",translation:"Качество",example:"我们的产品质量很高。",examplePinyin:"Wǒmen de chǎnpǐn zhìliàng hěn gāo.",exampleTranslation:"Качество наших продуктов очень высокое.",category:"💼 Бизнес",hsk:3},
+  {hanzi:"客户",pinyin:"kè hù",tone:"4-4",translation:"Клиент; Заказчик",example:"这个客户非常重要。",examplePinyin:"Zhège kèhù fēicháng zhòngyào.",exampleTranslation:"Этот клиент очень важный.",category:"💼 Бизнес",hsk:3},
+  {hanzi:"合同",pinyin:"hé tong",tone:"2-5",translation:"Контракт; Договор",example:"我们需要签合同。",examplePinyin:"Wǒmen xūyào qiān hétong.",exampleTranslation:"Нам нужно подписать контракт.",category:"💼 Бизнес",hsk:3},
+  {hanzi:"付款",pinyin:"fù kuǎn",tone:"4-3",translation:"Оплата; Платить",example:"请在30天内付款。",examplePinyin:"Qǐng zài sānshí tiān nèi fùkuǎn.",exampleTranslation:"Пожалуйста, произведите оплату в течение 30 дней.",category:"💼 Бизнес",hsk:3},
+  {hanzi:"发货",pinyin:"fā huò",tone:"1-4",translation:"Отгружать; Отправлять товар",example:"我们下周发货。",examplePinyin:"Wǒmen xià zhōu fāhuò.",exampleTranslation:"Мы отправим товар на следующей неделе.",category:"💼 Бизнес",hsk:3},
+  {hanzi:"谈判",pinyin:"tán pàn",tone:"2-4",translation:"Переговоры; Вести переговоры",example:"明天我们有重要谈判。",examplePinyin:"Míngtiān wǒmen yǒu zhòngyào tánpàn.",exampleTranslation:"Завтра у нас важные переговоры.",category:"💼 Бизнес",hsk:4},
+  {hanzi:"出口",pinyin:"chū kǒu",tone:"1-3",translation:"Экспорт; Экспортировать",example:"我们主要做出口生意。",examplePinyin:"Wǒmen zhǔyào zuò chūkǒu shēngyi.",exampleTranslation:"Мы в основном занимаемся экспортным бизнесом.",category:"💼 Бизнес",hsk:4},
+
+  // Места
+  {hanzi:"中国",pinyin:"zhōng guó",tone:"1-2",translation:"Китай",example:"我很喜欢中国文化。",examplePinyin:"Wǒ hěn xǐhuān Zhōngguó wénhuà.",exampleTranslation:"Мне очень нравится китайская культура.",category:"🌏 Места",hsk:1},
+  {hanzi:"北京",pinyin:"běi jīng",tone:"3-1",translation:"Пекин",example:"北京是中国的首都。",examplePinyin:"Běijīng shì Zhōngguó de shǒudū.",exampleTranslation:"Пекин — столица Китая.",category:"🌏 Места",hsk:1},
+  {hanzi:"上海",pinyin:"shàng hǎi",tone:"4-3",translation:"Шанхай",example:"上海是中国最大的城市之一。",examplePinyin:"Shànghǎi shì Zhōngguó zuì dà de chéngshì zhī yī.",exampleTranslation:"Шанхай — один из крупнейших городов Китая.",category:"🌏 Места",hsk:1},
+  {hanzi:"饭店",pinyin:"fàn diàn",tone:"4-4",translation:"Ресторан; Гостиница",example:"我们在这家饭店开会。",examplePinyin:"Wǒmen zài zhè jiā fàndiàn kāihuì.",exampleTranslation:"Мы проводим встречу в этом отеле.",category:"🌏 Места",hsk:1},
+  {hanzi:"机场",pinyin:"jī chǎng",tone:"1-3",translation:"Аэропорт",example:"我明天去机场接客户。",examplePinyin:"Wǒ míngtiān qù jīchǎng jiē kèhù.",exampleTranslation:"Завтра я еду в аэропорт встречать клиента.",category:"🌏 Места",hsk:2},
+
+  // Вопросительные слова
+  {hanzi:"什么",pinyin:"shén me",tone:"2-5",translation:"Что; Какой",example:"这是什么意思？",examplePinyin:"Zhè shì shénme yìsi?",exampleTranslation:"Что это значит?",category:"❓ Вопросы",hsk:1},
+  {hanzi:"哪里",pinyin:"nǎ lǐ",tone:"3-3",translation:"Где; Куда",example:"你在哪里？",examplePinyin:"Nǐ zài nǎlǐ?",exampleTranslation:"Где ты?",category:"❓ Вопросы",hsk:1},
+  {hanzi:"怎么",pinyin:"zěn me",tone:"3-5",translation:"Как; Каким образом",example:"这个汉字怎么读？",examplePinyin:"Zhège Hànzì zěnme dú?",exampleTranslation:"Как читается этот иероглиф?",category:"❓ Вопросы",hsk:1},
+  {hanzi:"为什么",pinyin:"wèi shén me",tone:"4-2-5",translation:"Почему",example:"为什么你学习汉语？",examplePinyin:"Wèishénme nǐ xuéxí Hànyǔ?",exampleTranslation:"Почему ты учишь китайский?",category:"❓ Вопросы",hsk:1},
+  {hanzi:"多少",pinyin:"duō shǎo",tone:"1-3",translation:"Сколько",example:"这个多少钱？",examplePinyin:"Zhège duōshǎo qián?",exampleTranslation:"Сколько это стоит?",category:"❓ Вопросы",hsk:1},
+];
+
+// ── Tones data ─────────────────────────────────────────────────
+const tonesData = [
+  {tone:1, name:"Первый тон", desc:"Высокий ровный", symbol:"ā", color:"#2563eb", example:"妈 (mā) — мама", tip:"Как удивлённое «А-а-а?» на одной высокой ноте"},
+  {tone:2, name:"Второй тон", desc:"Восходящий", symbol:"á", color:"#16a34a", example:"麻 (má) — конопля", tip:"Как вопрос «А?» — голос идёт вверх"},
+  {tone:3, name:"Третий тон", desc:"Нисходяще-восходящий", symbol:"ǎ", color:"#d97706", example:"马 (mǎ) — лошадь", tip:"Голос сначала идёт вниз, потом вверх. Как «Хм-м»"},
+  {tone:4, name:"Четвёртый тон", desc:"Резко нисходящий", symbol:"à", color:"#dc2626", example:"骂 (mà) — ругать", tip:"Как команда или удивление «А!» — резко вниз"},
+  {tone:5, name:"Нейтральный тон", desc:"Короткий, ненапряжённый", symbol:"a", color:"#7c7c8a", example:"吗 (ma) — частица вопроса", tip:"Короткий, быстрый, без ударения"},
+];
+
+// ── Grammar data ───────────────────────────────────────────────
+const grammarData = [
+  {id:'word-order', category:'Основы', title:'Порядок слов',
+   content:`<div class="rule-block"><h4>Базовая структура предложения</h4><p>Китайский — язык с жёстким порядком слов: Подлежащее + Сказуемое + Дополнение. В отличие от русского, порядок нельзя менять произвольно.</p><div class="rule-formula">主语 (Подлежащее) + 谓语 (Сказуемое) + 宾语 (Дополнение)</div><div class="rule-example"><div class="ch">我 爱 中国。</div><div class="py">Wǒ ài Zhōngguó.</div><div class="ru">Я люблю Китай.</div></div><div class="rule-example"><div class="ch">他 吃 饭。</div><div class="py">Tā chī fàn.</div><div class="ru">Он ест рис.</div></div></div><div class="rule-block"><h4>Место обстоятельств времени и места</h4><p>Обстоятельства времени и места ставятся ПЕРЕД сказуемым, а не после, как в русском.</p><div class="rule-example"><div class="ch">我 今天 在北京 工作。</div><div class="py">Wǒ jīntiān zài Běijīng gōngzuò.</div><div class="ru">Я сегодня работаю в Пекине.</div></div></div>`},
+  {id:'ma-question', category:'Основы', title:'Вопрос с 吗 (ma)',
+   content:`<div class="rule-block"><h4>Самый простой способ задать вопрос</h4><p>Добавь частицу 吗 (ma) в конец утвердительного предложения — и оно превращается в вопрос. Никаких изменений порядка слов!</p><div class="rule-formula">Утвердительное предложение + 吗？</div><div class="rule-example"><div class="ch">你是俄罗斯人。→ 你是俄罗斯人吗？</div><div class="py">Nǐ shì Éluósī rén. → Nǐ shì Éluósī rén ma?</div><div class="ru">Ты русский. → Ты русский?</div></div><div class="rule-example"><div class="ch">你喜欢喝茶吗？</div><div class="py">Nǐ xǐhuān hē chá ma?</div><div class="ru">Тебе нравится пить чай?</div></div></div>`},
+  {id:'negation', category:'Основы', title:'Отрицание 不 и 没',
+   content:`<div class="rule-block"><h4>不 (bù) — общее отрицание</h4><p>Ставится перед глаголом или прилагательным. Используется для настоящего/будущего и постоянных характеристик.</p><div class="rule-example"><div class="ch">我不是老师。</div><div class="py">Wǒ bù shì lǎoshī.</div><div class="ru">Я не учитель.</div></div><div class="rule-example"><div class="ch">他不喜欢吃辣的。</div><div class="py">Tā bù xǐhuān chī là de.</div><div class="ru">Ему не нравится есть острое.</div></div></div><div class="rule-block"><h4>没 (méi) — отрицание действия в прошлом</h4><p>Используется с глаголом 有 (иметь) и для отрицания завершённых действий.</p><div class="rule-example"><div class="ch">我没有时间。</div><div class="py">Wǒ méiyǒu shíjiān.</div><div class="ru">У меня нет времени.</div></div><div class="rule-example"><div class="ch">我昨天没去。</div><div class="py">Wǒ zuótiān méi qù.</div><div class="ru">Вчера я не ходил.</div></div></div>`},
+  {id:'de-particle', category:'Основы', title:'Частица 的 (de)',
+   content:`<div class="rule-block"><h4>的 — притяжательность и определение</h4><p>Соединяет определение с определяемым словом. Аналог русского «-ого/-ый» или апострофа в английском.</p><div class="rule-formula">Определение + 的 + Существительное</div><div class="rule-example"><div class="ch">我的朋友</div><div class="py">wǒ de péngyou</div><div class="ru">мой друг</div></div><div class="rule-example"><div class="ch">中国的产品质量很好。</div><div class="py">Zhōngguó de chǎnpǐn zhìliàng hěn hǎo.</div><div class="ru">Качество китайских товаров очень хорошее.</div></div></div>`},
+  {id:'hěn', category:'Основы', title:'Усилитель 很 (hěn)',
+   content:`<div class="rule-block"><h4>很 обязательно при прилагательных-сказуемых</h4><p>В китайском прилагательное не может быть сказуемым само по себе — нужна «пустая» связка 很. Здесь 很 не значит «очень», это грамматическая норма.</p><div class="rule-formula">主语 + 很 + 形容词</div><div class="rule-example"><div class="ch">这个产品很好。</div><div class="py">Zhège chǎnpǐn hěn hǎo.</div><div class="ru">Этот товар (очень) хороший. [не «очень», просто норма]</div></div><div class="rule-example"><div class="ch">价格很贵。</div><div class="py">Jiàgé hěn guì.</div><div class="ru">Цена высокая.</div></div></div>`},
+  {id:'le-particle', category:'Аспекты', title:'Частица 了 (le)',
+   content:`<div class="rule-block"><h4>了 — завершённость действия</h4><p>Ставится после глагола и показывает, что действие завершено. Это не прошедшее время само по себе — это маркер завершённости.</p><div class="rule-example"><div class="ch">我吃了。</div><div class="py">Wǒ chī le.</div><div class="ru">Я поел (уже).</div></div><div class="rule-example"><div class="ch">合同签了吗？</div><div class="py">Hétong qiān le ma?</div><div class="ru">Контракт подписан?</div></div></div><div class="rule-block"><h4>了 в конце предложения — изменение ситуации</h4><div class="rule-example"><div class="ch">太晚了！</div><div class="py">Tài wǎn le!</div><div class="ru">Уже слишком поздно!</div></div><div class="rule-example"><div class="ch">我明白了。</div><div class="py">Wǒ míngbái le.</div><div class="ru">Я понял (теперь).</div></div></div>`},
+  {id:'guo-particle', category:'Аспекты', title:'Частица 过 (guò)',
+   content:`<div class="rule-block"><h4>过 — опыт в прошлом</h4><p>Показывает, что действие происходило хоть раз в жизни. Аналог "have been/done" в английском Present Perfect.</p><div class="rule-formula">Глагол + 过 + Дополнение</div><div class="rule-example"><div class="ch">你去过中国吗？</div><div class="py">Nǐ qù guò Zhōngguó ma?</div><div class="ru">Ты был в Китае? (когда-нибудь)</div></div><div class="rule-example"><div class="ch">我没学过中文。</div><div class="py">Wǒ méi xué guò Zhōngwén.</div><div class="ru">Я никогда не учил китайский.</div></div></div>`},
+  {id:'zai', category:'Предлоги', title:'在 (zài) — место и процесс',
+   content:`<div class="rule-block"><h4>在 + место = нахождение</h4><div class="rule-example"><div class="ch">我在上海工作。</div><div class="py">Wǒ zài Shànghǎi gōngzuò.</div><div class="ru">Я работаю в Шанхае.</div></div><div class="rule-example"><div class="ch">他现在在哪里？</div><div class="py">Tā xiànzài zài nǎlǐ?</div><div class="ru">Где он сейчас?</div></div></div><div class="rule-block"><h4>在 + глагол = действие в процессе</h4><div class="rule-example"><div class="ch">我在学习汉语。</div><div class="py">Wǒ zài xuéxí Hànyǔ.</div><div class="ru">Я (сейчас) учу китайский.</div></div></div>`},
+  {id:'bi', category:'Сравнение', title:'比 (bǐ) — сравнение',
+   content:`<div class="rule-block"><h4>A 比 B + прилагательное</h4><p>Конструкция сравнения: «A более [прилагательное], чем B»</p><div class="rule-formula">A + 比 + B + 形容词</div><div class="rule-example"><div class="ch">这个价格比那个便宜。</div><div class="py">Zhège jiàgé bǐ nàge piányí.</div><div class="ru">Эта цена дешевле, чем та.</div></div><div class="rule-example"><div class="ch">上海比北京大。</div><div class="py">Shànghǎi bǐ Běijīng dà.</div><div class="ru">Шанхай больше Пекина.</div></div></div>`},
+  {id:'yao-want', category:'Модальные', title:'要 (yào) — хотеть/нужно',
+   content:`<div class="rule-block"><h4>要 — желание или необходимость</h4><div class="rule-example"><div class="ch">我要一杯咖啡。</div><div class="py">Wǒ yào yī bēi kāfēi.</div><div class="ru">Мне нужна одна чашка кофе. [заказ]</div></div><div class="rule-example"><div class="ch">我们要签合同。</div><div class="py">Wǒmen yào qiān hétong.</div><div class="ru">Нам нужно подписать контракт.</div></div></div><div class="rule-block"><h4>不要 — запрет или нежелание</h4><div class="rule-example"><div class="ch">请不要迟到。</div><div class="py">Qǐng bú yào chídào.</div><div class="ru">Пожалуйста, не опаздывайте.</div></div></div>`},
+];
+
+// ── Measure words ──────────────────────────────────────────────
+const measureWords = [
+  {mw:"个",pinyin:"gè",tone:"4",usage:"Универсальный (люди, предметы)",examples:"一个人 (один человек), 一个苹果 (одно яблоко), 一个问题 (один вопрос)"},
+  {mw:"本",pinyin:"běn",tone:"3",usage:"Книги, тетради, журналы",examples:"一本书 (одна книга), 一本杂志 (один журнал)"},
+  {mw:"张",pinyin:"zhāng",tone:"1",usage:"Плоские предметы (бумага, стол, кровать)",examples:"一张纸 (один лист бумаги), 一张桌子 (один стол), 一张票 (один билет)"},
+  {mw:"条",pinyin:"tiáo",tone:"2",usage:"Длинные гибкие предметы (рыба, дорога, брюки)",examples:"一条鱼 (одна рыба), 一条路 (одна дорога), 一条裤子 (одни брюки)"},
+  {mw:"件",pinyin:"jiàn",tone:"4",usage:"Одежда (верхняя), вещи, дела",examples:"一件衣服 (одна одежда), 一件事 (одно дело)"},
+  {mw:"杯",pinyin:"bēi",tone:"1",usage:"Кружки, стаканы (напитки)",examples:"一杯茶 (одна чашка чая), 一杯水 (один стакан воды)"},
+  {mw:"瓶",pinyin:"píng",tone:"2",usage:"Бутылки",examples:"一瓶水 (одна бутылка воды), 一瓶酒 (одна бутылка вина)"},
+  {mw:"位",pinyin:"wèi",tone:"4",usage:"Люди (уважительное)",examples:"一位客户 (один клиент), 一位老师 (один учитель)"},
+  {mw:"家",pinyin:"jiā",tone:"1",usage:"Компании, магазины, рестораны",examples:"一家公司 (одна компания), 一家餐厅 (один ресторан)"},
+  {mw:"次",pinyin:"cì",tone:"4",usage:"Разы, случаи",examples:"一次会议 (одно совещание), 三次 (три раза)"},
+  {mw:"种",pinyin:"zhǒng",tone:"3",usage:"Виды, сорта, типы",examples:"两种方法 (два метода), 多种颜色 (много цветов)"},
+  {mw:"份",pinyin:"fèn",tone:"4",usage:"Документы, порции, комплекты",examples:"一份合同 (один контракт), 一份报告 (один отчёт)"},
+];
+
+// ── Phrases ────────────────────────────────────────────────────
+const phrases = [
+  {cat:"🤝 Деловые встречи", items:[
+    {ch:"很高兴认识您。",py:"Hěn gāoxìng rènshi nín.",ru:"Очень рад познакомиться с вами."},
+    {ch:"请多关照。",py:"Qǐng duō guānzhào.",ru:"Прошу о поддержке. [стандартная фраза при знакомстве в бизнесе]"},
+    {ch:"我们公司专门生产…",py:"Wǒmen gōngsī zhuānmén shēngchǎn…",ru:"Наша компания специализируется на производстве…"},
+    {ch:"我们希望建立长期合作关系。",py:"Wǒmen xīwàng jiànlì chángqī hézuò guānxi.",ru:"Мы надеемся установить долгосрочные партнёрские отношения."},
+    {ch:"请问贵公司主要做什么业务？",py:"Qǐngwèn guì gōngsī zhǔyào zuò shénme yèwù?",ru:"Скажите, каким бизнесом занимается ваша комп司?"},
+  ]},
+  {cat:"💰 Цены и переговоры", items:[
+    {ch:"这个价格有点高，能便宜一点吗？",py:"Zhège jiàgé yǒudiǎn gāo, néng piányí yīdiǎn ma?",ru:"Эта цена немного высокая, можно немного дешевле?"},
+    {ch:"我们可以给您打九折。",py:"Wǒmen kěyǐ gěi nín dǎ jiǔ zhé.",ru:"Мы можем дать вам скидку 10% (платите 90%)."},
+    {ch:"请给我们发一份报价单。",py:"Qǐng gěi wǒmen fā yī fèn bàojià dān.",ru:"Пожалуйста, пришлите нам прайс-лист."},
+    {ch:"付款条件是什么？",py:"Fùkuǎn tiáojiàn shì shénme?",ru:"Каковы условия оплаты?"},
+    {ch:"我们需要考虑一下。",py:"Wǒmen xūyào kǎolǜ yīxià.",ru:"Нам нужно немного подумать."},
+  ]},
+  {cat:"📦 Логистика и поставки", items:[
+    {ch:"什么时候可以发货？",py:"Shénme shíhòu kěyǐ fāhuò?",ru:"Когда можно отгрузить товар?"},
+    {ch:"交货期大概需要多长时间？",py:"Jiāohuò qī dàgài xūyào duō cháng shíjiān?",ru:"Сколько примерно времени займёт срок поставки?"},
+    {ch:"请发给我们货物的跟踪号码。",py:"Qǐng fā gěi wǒmen huòwù de gēnzōng hàomǎ.",ru:"Пожалуйста, пришлите нам трекинг-номер груза."},
+    {ch:"货物已经到了吗？",py:"Huòwù yǐjīng dào le ma?",ru:"Товар уже прибыл?"},
+  ]},
+  {cat:"☕ Кафе и рестораны", items:[
+    {ch:"你们有什么推荐？",py:"Nǐmen yǒu shénme tuījiàn?",ru:"Что вы рекомендуете?"},
+    {ch:"我要一杯热茶。",py:"Wǒ yào yī bēi rè chá.",ru:"Мне одну чашку горячего чая."},
+    {ch:"不要放辣椒，谢谢。",py:"Bú yào fàng làjiāo, xièxie.",ru:"Не добавляйте острый перец, спасибо."},
+    {ch:"买单！",py:"Mǎi dān!",ru:"Счёт, пожалуйста!"},
+    {ch:"可以刷卡吗？",py:"Kěyǐ shuā kǎ ma?",ru:"Можно расплатиться картой?"},
+  ]},
+  {cat:"🚕 На улице и в транспорте", items:[
+    {ch:"请问，去…怎么走？",py:"Qǐngwèn, qù… zěnme zǒu?",ru:"Скажите пожалуйста, как пройти в…?"},
+    {ch:"我要去这个地址。",py:"Wǒ yào qù zhège dìzhǐ.",ru:"Мне нужно по этому адресу."},
+    {ch:"请在这里停车。",py:"Qǐng zài zhèlǐ tíng chē.",ru:"Пожалуйста, остановитесь здесь."},
+    {ch:"附近有地铁站吗？",py:"Fùjìn yǒu dìtiě zhàn ma?",ru:"Есть ли рядом станция метро?"},
+  ]},
+  {cat:"🔤 Учёба и непонимание", items:[
+    {ch:"请说慢一点儿。",py:"Qǐng shuō màn yīdiǎnr.",ru:"Пожалуйста, говорите помедленнее."},
+    {ch:"请再说一遍。",py:"Qǐng zài shuō yī biàn.",ru:"Пожалуйста, повторите ещё раз."},
+    {ch:"这个汉字怎么读？",py:"Zhège hànzì zěnme dú?",ru:"Как читается этот иероглиф?"},
+    {ch:"我不太明白。",py:"Wǒ bú tài míngbai.",ru:"Я не совсем понимаю."},
+    {ch:"用中文怎么说…？",py:"Yòng Zhōngwén zěnme shuō…?",ru:"Как сказать … по-китайски?"},
+  ]},
+];
+
+// ── State ──────────────────────────────────────────────────────
+const state = {
+  activeTab: 'dashboard',
+  settings: load(STORAGE.settings, defaultSettings),
+  tracker: load(STORAGE.tracker, []),
+  dictionary: normalizeDictionary(load(STORAGE.dictionary, starterWords)),
+  search: '', statusFilter: 'все', categoryFilter: 'все',
+  flashIndex: 0, showAnswer: false,
+  quiz: { current:null, options:[], answered:null, score:0, total:0, mode:'translation', categoryFilter:'все' },
+  activeGrammar: 'word-order',
+  activePhrasesCat: 0,
+};
+
+const tabs = [
+  ['dashboard','Дашборд'],
+  ['tones','Тоны'],
+  ['dictionary','Словарь'],
+  ['review','Повторение'],
+  ['quiz','Тест'],
+  ['grammar','Грамматика'],
+  ['phrases','Фразы'],
+  ['measure','Счётные слова'],
+];
+
+// ── Helpers ────────────────────────────────────────────────────
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function load(key, fallback){ try{ const r=localStorage.getItem(key); return r?JSON.parse(r):fallback; }catch(e){ return fallback; } }
+function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+function normalizeDictionary(arr){
+  return arr.map(x=>({status:'новое',reviewToday:false,addedAt:todayISO(),srsInterval:1,srsEaseFactor:2.5,srsRepetitions:0,srsDueDate:todayISO(),...x}));
+}
+function esc(s){ return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function safeJson(s){ return esc(JSON.stringify(s)); }
+function percent(a,b){ return Math.min(100,Math.round((a/Math.max(1,b))*100)); }
+
+function srsDueToday(){ return state.dictionary.filter(w=>!w.srsDueDate||w.srsDueDate<=todayISO()); }
+function streakCount(){
+  if(!state.tracker.length) return 0;
+  const dates=[...new Set(state.tracker.map(x=>x.date))].sort((a,b)=>b.localeCompare(a));
+  let streak=0,expected=todayISO();
+  for(const d of dates){
+    if(d===expected){streak++;const dt=new Date(expected);dt.setDate(dt.getDate()-1);expected=dt.toISOString().slice(0,10);}
+    else if(d<expected) break;
+  }
+  return streak;
+}
+
+function speakChinese(text){
+  if(!text||!('speechSynthesis' in window)) return;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=0.8;
+  const voices=window.speechSynthesis.getVoices()||[];
+  const v=voices.find(v=>/zh[-_]?CN/i.test(v.lang))||voices.find(v=>/^zh/i.test(v.lang))||null;
+  if(v) u.voice=v;
+  try{ window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch(e){}
+}
+
+function persist(){
+  save(STORAGE.settings, state.settings);
+  save(STORAGE.tracker, state.tracker);
+  save(STORAGE.dictionary, state.dictionary);
+}
+
+function applySRS(item, quality){
+  let {srsInterval=1,srsEaseFactor=2.5,srsRepetitions=0}=item;
+  if(quality===0){ srsRepetitions=0; srsInterval=1; }
+  else{
+    if(srsRepetitions===0) srsInterval=1;
+    else if(srsRepetitions===1) srsInterval=3;
+    else srsInterval=Math.round(srsInterval*srsEaseFactor);
+    srsRepetitions+=1;
+    srsEaseFactor=Math.max(1.3,srsEaseFactor+0.1-(3-quality)*(0.08+(3-quality)*0.02));
+  }
+  const srsDueDate=(()=>{const d=new Date();d.setDate(d.getDate()+srsInterval);return d.toISOString().slice(0,10);})();
+  const status=quality===0?'новое':quality===1?'учу':'знаю';
+  return {...item,srsInterval,srsEaseFactor,srsRepetitions,srsDueDate,status};
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify({settings:state.settings,tracker:state.tracker,dictionary:state.dictionary},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='chinese-learning-backup.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toggleTheme(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-btn').textContent=isDark?'🌙 Тёмная':'☀️ Светлая';
+  localStorage.setItem('zh_theme',isDark?'light':'dark');
+}
+(function(){
+  const saved=localStorage.getItem('zh_theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  document.documentElement.setAttribute('data-theme',saved);
+  document.addEventListener('DOMContentLoaded',function(){
+    const btn=document.getElementById('theme-btn');
+    if(btn) btn.textContent=saved==='dark'?'☀️ Светлая':'🌙 Тёмная';
+  });
+})();
+
+// ── Tabs ───────────────────────────────────────────────────────
+function setTab(tab){
+  state.activeTab=tab;
+  renderTabs();
+  document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+}
+function renderTabs(){
+  document.getElementById('tabs').innerHTML=tabs.map(([id,label])=>
+    `<button class="tab ${state.activeTab===id?'active':''}" onclick="setTab('${id}')">${label}</button>`
+  ).join('');
+}
+
+// ── Dashboard ──────────────────────────────────────────────────
+function renderDashboard(){
+  const newCount=state.dictionary.filter(w=>w.status==='новое').length;
+  const learningCount=state.dictionary.filter(w=>w.status==='учу').length;
+  const knownCount=state.dictionary.filter(w=>w.status==='знаю').length;
+  const dueToday=srsDueToday().length;
+  const streak=streakCount();
+
+  document.getElementById('dashboard').innerHTML=`
+    <div class="grid-2-equal" style="margin-bottom:16px">
+      <div class="card" style="display:flex;align-items:center;gap:16px">
+        <div style="font-size:40px;line-height:1">🔥</div>
+        <div>
+          <div class="label">Серия дней подряд</div>
+          <div style="font-size:30px;font-weight:900">${streak} ${streak===1?'день':streak>=2&&streak<=4?'дня':'дней'}</div>
+          <div class="small-muted">${streak===0?'Начни сегодня!':'Продолжай в том же духе!'}</div>
+        </div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:16px;${dueToday>0?'border-color:#fcd34d;background:var(--gold-soft)':''}">
+        <div style="font-size:40px;line-height:1">🃏</div>
+        <div>
+          <div class="label">Повторение сегодня</div>
+          <div style="font-size:30px;font-weight:900;color:${dueToday>0?'var(--gold)':'var(--text)'}">${dueToday}</div>
+          <div class="small-muted">${dueToday>0?`${dueToday} иероглифов ждут`:'Всё повторено ✓'}</div>
+          ${dueToday>0?`<button class="btn small gold" style="margin-top:8px" onclick="setTab('review')">Начать →</button>`:''}
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:16px">
+      <div class="card metric">
+        <div class="label">Словарь</div>
+        <div class="value">${state.dictionary.length}</div>
+        <div class="small-muted">иероглифов всего</div>
+        <div class="kpis" style="margin-top:14px;grid-template-columns:repeat(3,1fr)">
+          <div class="mini-box">Новые<strong>${newCount}</strong></div>
+          <div class="mini-box">Учу<strong style="color:#d97706">${learningCount}</strong></div>
+          <div class="mini-box">Знаю<strong style="color:var(--green)">${knownCount}</strong></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Цель на неделю</div>
+        <div style="display:grid;gap:12px">
+          <div><label>Новых слов в неделю</label><input type="number" value="${state.settings.weeklyWordsGoal}" onchange="updateSetting('weeklyWordsGoal',this.value)"></div>
+          <div><label>Минут практики в неделю</label><input type="number" value="${state.settings.weeklyPracticeGoal}" onchange="updateSetting('weeklyPracticeGoal',this.value)"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">План на сегодня</div>
+        <div class="list">
+          <div class="item-card">🃏 10 мин: SRS-повторение иероглифов</div>
+          <div class="item-card">✍️ 5 мин: написание новых иероглифов</div>
+          <div class="item-card">👂 15 мин: аудирование и тоны</div>
+          <div class="item-card">💬 10 мин: разговорные фразы вслух</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2-equal">
+      <div class="card">
+        <div class="section-title">С чего начать</div>
+        <div class="list">
+          <div class="item-card"><strong>1. Тоны</strong><div class="small-muted" style="margin-top:4px">Начни с вкладки Тоны — без этого невозможно понять китайский.</div></div>
+          <div class="item-card"><strong>2. Иероглифы</strong><div class="small-muted" style="margin-top:4px">Учи по 5-7 иероглифов в день через карточки. Пиши рукой — это помогает запоминать.</div></div>
+          <div class="item-card"><strong>3. Счётные слова</strong><div class="small-muted" style="margin-top:4px">Это особенность китайского. Загляни в раздел 量词.</div></div>
+          <div class="item-card"><strong>4. Фразы</strong><div class="small-muted" style="margin-top:4px">Учи готовые фразы целиком — мозг быстрее усваивает паттерны.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Резервная копия</div>
+        <div class="notice gold" style="margin-bottom:14px">Сохраняй прогресс — экспортируй данные в JSON раз в неделю.</div>
+        <div class="button-row">
+          <button class="btn" onclick="exportData()">Экспорт данных</button>
+          <button class="btn soft" onclick="resetDictionary()">🔄 Обновить словарь</button>
+        </div>
+      </div>
+    </div>`;
+}
+function updateSetting(key,val){ state.settings[key]=Number(val||0); persist(); renderDashboard(); }
+function resetDictionary(){
+  if(!confirm('Сбросить словарь до актуальной версии? Ваши добавленные слова сохранятся.')) return;
+  const userWords=state.dictionary.filter(w=>w.source==='пользователь');
+  const fresh=normalizeDictionary(starterWords);
+  const freshSet=new Set(fresh.map(w=>w.hanzi));
+  const uniqueUser=userWords.filter(w=>!freshSet.has(w.hanzi));
+  state.dictionary=[...fresh,...uniqueUser];
+  persist(); renderDashboard(); renderDictionary(); renderReview();
+  alert(`Готово! ${fresh.length} базовых иероглифов + ${uniqueUser.length} ваших = ${state.dictionary.length} всего.`);
+}
+
+// ── Tones ──────────────────────────────────────────────────────
+function renderTones(){
+  document.getElementById('tones').innerHTML=`
+    <div class="grid-2-equal" style="margin-bottom:16px">
+      ${tonesData.map(t=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+            <div style="width:52px;height:52px;border-radius:50%;background:${t.color};display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff">${t.symbol}</div>
+            <div>
+              <div style="font-size:16px;font-weight:800">${t.name}</div>
+              <div class="small-muted">${t.desc}</div>
+            </div>
+          </div>
+          <div class="rule-example">
+            <div style="font-size:18px;font-weight:800;color:${t.color}">${t.example}</div>
+            <div class="small-muted" style="margin-top:6px">💡 ${t.tip}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div class="section-title">Система пиньинь — знаки тонов</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">
+        ${['ā á ǎ à a','ē é ě è e','ī í ǐ ì i','ō ó ǒ ò o','ū ú ǔ ù u'].map((row,i)=>`
+          <div style="text-align:center;padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm)">
+            ${row.split(' ').map((c,j)=>`<div style="font-size:20px;font-weight:800;color:${['#2563eb','#16a34a','#d97706','#dc2626','var(--muted)'][j]}">${c}</div>`).join('')}
+          </div>`).join('')}
+      </div>
+      <div class="notice gold">
+        💡 Правило тонального знака: знак тона ставится над гласной в следующем порядке приоритета: a, e → о → i, u, ü (если вместе, знак на последней). Исключение: ui и iu — знак на второй гласной.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Изменение тонов (тональный сандхи)</div>
+      <div class="list">
+        <div class="item-card">
+          <strong>Два третьих тона подряд</strong>
+          <div class="small-muted" style="margin-top:6px">Первый 3-й тон меняется на 2-й тон</div>
+          <div class="rule-example" style="margin-top:8px">
+            <div class="ch">你好 — пишем: nǐ hǎo, произносим: ní hǎo</div>
+          </div>
+        </div>
+        <div class="item-card">
+          <strong>Частица 一 (yī) меняет тон</strong>
+          <div class="small-muted" style="margin-top:6px">Перед 4-м тоном → 2-й тон; перед 1,2,3 тонами → 4-й тон</div>
+          <div class="rule-example" style="margin-top:8px">
+            <div class="ch">一个 yí ge (перед 5-м) · 一天 yī tiān (перед 1-м)</div>
+          </div>
+        </div>
+        <div class="item-card">
+          <strong>不 (bù) меняет тон</strong>
+          <div class="small-muted" style="margin-top:6px">Перед 4-м тоном меняется на 2-й</div>
+          <div class="rule-example" style="margin-top:8px">
+            <div class="ch">不是 bú shì · 不去 bú qù</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── Dictionary ─────────────────────────────────────────────────
+function dictCategories(){ return ['все',...Array.from(new Set(state.dictionary.map(x=>x.category)))]; }
+function filteredDict(){
+  const q=state.search.trim().toLowerCase();
+  return state.dictionary.filter(item=>{
+    const s=[item.hanzi,item.pinyin,item.translation,item.example,item.category].join(' ').toLowerCase();
+    return (!q||s.includes(q))&&(state.statusFilter==='все'||item.status===state.statusFilter)&&(state.categoryFilter==='все'||item.category===state.categoryFilter);
+  });
+}
+function wordKey(item){ return encodeURIComponent(item.hanzi+'|'+item.translation); }
+function parseKey(key){ const [hanzi,translation]=decodeURIComponent(key).split('|'); return {hanzi,translation}; }
+
+function wordCard(item){
+  const statusClass=item.status==='новое'?'status-new':item.status==='учу'?'status-learning':'status-known';
+  const key=wordKey(item);
+  const hskColor=item.hsk<=2?'#2563eb':item.hsk<=3?'#16a34a':'#d97706';
+  return `<div class="word-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+      <div style="display:flex;align-items:baseline;gap:14px">
+        <div class="hanzi" style="cursor:pointer" onclick="speakChinese('${esc(item.hanzi)}')">${esc(item.hanzi)}</div>
+        <div>
+          <div class="pinyin">${esc(item.pinyin)}</div>
+          <div style="font-weight:700;margin-top:4px">${esc(item.translation)}</div>
+        </div>
+      </div>
+      <button class="btn danger small" onclick="removeWord('${key}')">Удалить</button>
+    </div>
+    <div class="chips" style="margin-top:10px">
+      <span class="chip">${esc(item.category)}</span>
+      <span class="chip" style="background:${hskColor}15;border-color:${hskColor}40;color:${hskColor}">HSK ${item.hsk||'?'}</span>
+      <span class="chip ${statusClass}">${esc(item.status)}</span>
+      ${item.tone?`<span class="chip">Тон: ${esc(item.tone)}</span>`:''}
+    </div>
+    ${item.example?`<div class="item-card" style="margin-top:10px">
+      <div style="font-size:15px;font-weight:700">${esc(item.example)}</div>
+      ${item.examplePinyin?`<div class="pinyin-sm" style="margin-top:4px">${esc(item.examplePinyin)}</div>`:''}
+      ${item.exampleTranslation?`<div class="small-muted" style="margin-top:4px">${esc(item.exampleTranslation)}</div>`:''}
+      <button class="btn secondary small" style="margin-top:8px" onclick="speakChinese('${esc(item.example)}')">🔊 Пример</button>
+    </div>`:''}
+    <div class="button-row">
+      ${['новое','учу','знаю'].map(st=>`<button class="btn ${item.status===st?'':'secondary'} small" onclick="updateWordStatus('${key}','${st}')">${st}</button>`).join('')}
+      <button class="btn secondary small" onclick="speakChinese('${esc(item.hanzi)}')">🔊 Слово</button>
+    </div>
+  </div>`;
+}
+
+function renderDictionary(){
+  document.getElementById('dictionary').innerHTML=`
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-title">Добавить иероглиф</div>
+        <div style="display:grid;gap:10px">
+          <div><label>Иероглиф(ы)</label><input id="nw-hanzi" placeholder="你好" style="font-size:20px"></div>
+          <div><label>Пиньинь</label><input id="nw-pinyin" placeholder="nǐ hǎo"></div>
+          <div><label>Тоны (через дефис)</label><input id="nw-tone" placeholder="3-3"></div>
+          <div><label>Перевод</label><input id="nw-translation" placeholder="Привет"></div>
+          <div><label>Категория</label><input id="nw-category" value="Мои слова"></div>
+          <div><label>Пример предложения</label><textarea id="nw-example" placeholder="你好，很高兴认识你。"></textarea></div>
+          <div><label>Пиньинь примера</label><input id="nw-expy" placeholder="Nǐ hǎo, hěn gāoxìng rènshi nǐ."></div>
+          <div><label>Перевод примера</label><input id="nw-extrans" placeholder="Привет, рад познакомиться."></div>
+          <button class="btn" onclick="addWord()">Добавить в словарь</button>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:grid;gap:10px;margin-bottom:14px">
+          <div class="section-title" style="margin:0">Словарь (${state.dictionary.length} иероглифов)</div>
+          <input placeholder="Поиск по иероглифу, пиньиню, переводу..." value="${esc(state.search)}" oninput="setSearch(this.value)">
+          <div style="display:flex;gap:8px">
+            <select onchange="setStatusFilter(this.value)" style="flex:1">
+              ${['все','новое','учу','знаю'].map(x=>`<option value="${x}" ${state.statusFilter===x?'selected':''}>${x==='все'?'Все статусы':x}</option>`).join('')}
+            </select>
+            <select onchange="setCategoryFilter(this.value)" style="flex:1">
+              ${dictCategories().map(x=>`<option value="${esc(x)}" ${state.categoryFilter===x?'selected':''}>${x==='все'?'Все категории':x}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div class="list">
+          ${filteredDict().length?filteredDict().map(item=>wordCard(item)).join(''):'<div class="small-muted">Ничего не найдено.</div>'}
+        </div>
+      </div>
+    </div>`;
+}
+
+function setSearch(v){ state.search=v; renderDictionary(); }
+function setStatusFilter(v){ state.statusFilter=v; renderDictionary(); }
+function setCategoryFilter(v){ state.categoryFilter=v; renderDictionary(); }
+
+function addWord(){
+  const hanzi=document.getElementById('nw-hanzi').value.trim();
+  const translation=document.getElementById('nw-translation').value.trim();
+  if(!hanzi||!translation){ alert('Заполни иероглиф и перевод.'); return; }
+  state.dictionary.unshift(normalizeDictionary([{
+    hanzi, pinyin:document.getElementById('nw-pinyin').value.trim(),
+    tone:document.getElementById('nw-tone').value.trim(),
+    translation,
+    category:document.getElementById('nw-category').value.trim()||'Мои слова',
+    example:document.getElementById('nw-example').value.trim(),
+    examplePinyin:document.getElementById('nw-expy').value.trim(),
+    exampleTranslation:document.getElementById('nw-extrans').value.trim(),
+    source:'пользователь', hsk:0,
+  }])[0]);
+  persist(); renderDictionary(); renderDashboard();
+}
+function removeWord(key){
+  const t=parseKey(key);
+  state.dictionary=state.dictionary.filter(w=>!(w.hanzi===t.hanzi&&w.translation===t.translation));
+  persist(); renderDictionary(); renderDashboard(); renderReview();
+}
+function updateWordStatus(key,status){
+  const t=parseKey(key);
+  state.dictionary=state.dictionary.map(w=>w.hanzi===t.hanzi&&w.translation===t.translation?{...w,status}:w);
+  persist(); renderDictionary(); renderDashboard(); renderReview();
+}
+
+// ── Review (SRS) ───────────────────────────────────────────────
+function wordsForReview(){ return srsDueToday().sort((a,b)=>(a.srsDueDate||'').localeCompare(b.srsDueDate||'')); }
+function renderReview(){
+  const arr=wordsForReview();
+  const w=arr.length?arr[state.flashIndex%arr.length]:null;
+  document.getElementById('review').innerHTML=`
+    <div class="grid-2" style="grid-template-columns:1.3fr 1fr">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+          <div class="section-title" style="margin:0">SRS Повторение</div>
+          <span class="chip" style="${arr.length>0?'background:var(--gold-soft);border-color:#fcd34d;color:var(--gold-text)':'background:var(--green-soft);border-color:#a7f3d0;color:var(--green)'}">
+            ${arr.length>0?`⏰ Осталось: ${arr.length}`:'✓ Всё повторено'}
+          </span>
+        </div>
+        ${!w?`<div style="text-align:center;padding:40px 20px">
+          <div style="font-size:52px;margin-bottom:12px">🎉</div>
+          <div style="font-size:18px;font-weight:800;margin-bottom:8px">Все иероглифы повторены!</div>
+          <div class="small-muted">Следующие появятся завтра по расписанию.</div>
+        </div>`:`
+          <div class="review-card">
+            <div>
+              <div class="small-muted">Карточка ${(state.flashIndex%arr.length)+1} из ${arr.length} · ${w.srsRepetitions>0?`Повторений: ${w.srsRepetitions}`:'Первый раз'}</div>
+              <div style="text-align:center;margin:16px 0 8px">
+                <div class="flash-hanzi" style="cursor:pointer" onclick="speakChinese('${esc(w.hanzi)}')">${esc(w.hanzi)}</div>
+                <div class="pinyin" style="margin-top:8px;font-size:20px">${esc(w.pinyin)}</div>
+                <div class="small-muted" style="margin-top:4px">${esc(w.category)}</div>
+              </div>
+              ${state.showAnswer?`<div style="margin-top:16px;text-align:center;animation:fadeSlide .2s ease">
+                <div style="font-size:22px;font-weight:800;margin-bottom:10px">${esc(w.translation)}</div>
+                ${w.example?`<div class="item-card" style="text-align:left;margin-top:10px">
+                  <div style="font-weight:700">${esc(w.example)}</div>
+                  ${w.examplePinyin?`<div class="pinyin-sm" style="margin-top:4px">${esc(w.examplePinyin)}</div>`:''}
+                  ${w.exampleTranslation?`<div class="small-muted" style="margin-top:4px">${esc(w.exampleTranslation)}</div>`:''}
+                </div>`:''}
+              </div>`:''}
+            </div>
+            <div>
+              ${!state.showAnswer?`<div class="button-row"><button class="btn" onclick="toggleAnswer()">Показать ответ</button><button class="btn secondary" onclick="speakChinese('${esc(w.hanzi)}')">🔊 Послушать</button></div>`:`
+              <div style="margin-top:14px">
+                <div class="small-muted" style="margin-bottom:8px;font-weight:600">Как запомнил?</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                  <button class="btn danger" style="flex-direction:column;padding:10px 4px;gap:2px" onclick="srsAnswer(0)"><span style="font-size:16px">😰</span><span style="font-size:11px">Забыл</span><span style="font-size:10px;opacity:.7">завтра</span></button>
+                  <button class="btn secondary" style="flex-direction:column;padding:10px 4px;gap:2px" onclick="srsAnswer(1)"><span style="font-size:16px">😅</span><span style="font-size:11px">Трудно</span><span style="font-size:10px;opacity:.7">+2 дня</span></button>
+                  <button class="btn soft" style="flex-direction:column;padding:10px 4px;gap:2px" onclick="srsAnswer(2)"><span style="font-size:16px">🙂</span><span style="font-size:11px">Хорошо</span><span style="font-size:10px;opacity:.7">+N дней</span></button>
+                  <button class="btn gold" style="flex-direction:column;padding:10px 4px;gap:2px" onclick="srsAnswer(3)"><span style="font-size:16px">🚀</span><span style="font-size:11px">Легко</span><span style="font-size:10px;opacity:.7">+больше</span></button>
+                </div>
+              </div>`}
+            </div>
+          </div>`}
+      </div>
+      <div class="card">
+        <div class="section-title">Советы по запоминанию</div>
+        <div class="list">
+          <div class="item-card"><strong>Пиши рукой</strong><div class="small-muted" style="margin-top:4px">Написание иероглифа от руки активирует моторную память. Пиши 5 раз при первом знакомстве.</div></div>
+          <div class="item-card"><strong>Учи тон вместе с иероглифом</strong><div class="small-muted" style="margin-top:4px">Тон — часть слова. Не «马», а «mǎ — лошадь» как единое целое.</div></div>
+          <div class="item-card"><strong>Ассоциации для иероглифов</strong><div class="small-muted" style="margin-top:4px">Многие иероглифы — рисунки. 人 (rén) — человек, похож на идущего человека.</div></div>
+          <div class="item-card">
+            <strong>Статистика</strong>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px">
+              <div style="text-align:center"><div style="font-size:20px;font-weight:900">${state.dictionary.filter(x=>x.status==='новое').length}</div><div class="small-muted" style="font-size:11px">Новые</div></div>
+              <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:#d97706">${state.dictionary.filter(x=>x.status==='учу').length}</div><div class="small-muted" style="font-size:11px">Учу</div></div>
+              <div style="text-align:center"><div style="font-size:20px;font-weight:900;color:var(--green)">${state.dictionary.filter(x=>x.status==='знаю').length}</div><div class="small-muted" style="font-size:11px">Знаю</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+function toggleAnswer(){ state.showAnswer=!state.showAnswer; renderReview(); }
+function srsAnswer(quality){
+  const arr=wordsForReview();
+  if(!arr.length) return;
+  const w=arr[state.flashIndex%arr.length];
+  const updated=applySRS(w,quality);
+  state.dictionary=state.dictionary.map(item=>item.hanzi===w.hanzi&&item.translation===w.translation?updated:item);
+  persist(); state.showAnswer=false;
+  const remaining=wordsForReview();
+  state.flashIndex=remaining.length===0?0:state.flashIndex%Math.max(1,remaining.length);
+  renderReview(); renderDashboard();
+}
+
+// ── Quiz ───────────────────────────────────────────────────────
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+function quizCategories(){ return ['все',...Array.from(new Set(state.dictionary.map(x=>x.category)))]; }
+function quizPool(){
+  const cat=state.quiz.categoryFilter;
+  return (cat==='все'?state.dictionary:state.dictionary.filter(w=>w.category===cat)).filter(w=>w.hanzi&&w.translation);
+}
+function generateQuizQuestion(){
+  const pool=quizPool();
+  if(pool.length<4){ state.quiz.current=null; state.quiz.options=[]; return; }
+  const correct=pool[Math.floor(Math.random()*pool.length)];
+  const wrong=shuffle(pool.filter(w=>w.hanzi!==correct.hanzi)).slice(0,3);
+  state.quiz.current=correct;
+  state.quiz.options=shuffle([correct,...wrong]);
+  state.quiz.answered=null;
+}
+function quizAnswer(hanzi){
+  if(state.quiz.answered!==null) return;
+  state.quiz.answered=hanzi;
+  state.quiz.total++;
+  if(hanzi===state.quiz.current.hanzi) state.quiz.score++;
+  renderQuiz();
+}
+function quizNext(){ generateQuizQuestion(); renderQuiz(); }
+function setQuizCategory(v){ state.quiz.categoryFilter=v; state.quiz.score=0; state.quiz.total=0; generateQuizQuestion(); renderQuiz(); }
+function setQuizMode(v){ state.quiz.mode=v; state.quiz.score=0; state.quiz.total=0; generateQuizQuestion(); renderQuiz(); }
+
+function renderQuiz(){
+  const q=state.quiz;
+  const pool=quizPool();
+  const acc=q.total>0?Math.round((q.score/q.total)*100):0;
+  if(!q.current) generateQuizQuestion();
+  const w=q.current;
+  const showQ=q.mode==='translation'?`<div style="text-align:center"><div class="hanzi-large" style="cursor:pointer" onclick="speakChinese('${w?esc(w.hanzi):''}')">${w?esc(w.hanzi):''}</div><div class="pinyin" style="margin-top:6px;font-size:18px">${w?esc(w.pinyin):''}</div></div>`:
+    `<div style="text-align:center;font-size:20px;font-weight:800">${w?esc(w.translation):''}</div>`;
+
+  document.getElementById('quiz').innerHTML=`
+    <div class="grid-2" style="grid-template-columns:1.3fr 1fr">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+          <div class="section-title" style="margin:0">Тест</div>
+          <span class="chip" style="font-weight:700">${q.score}/${q.total} · ${acc}%</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <select onchange="setQuizCategory(this.value)" style="flex:1;min-width:140px">
+            ${quizCategories().map(c=>`<option value="${esc(c)}" ${q.categoryFilter===c?'selected':''}>${c==='все'?'Все категории':esc(c)}</option>`).join('')}
+          </select>
+          <div style="display:flex;gap:4px">
+            <button class="btn ${q.mode==='translation'?'':'secondary'} small" onclick="setQuizMode('translation')">汉字→RU</button>
+            <button class="btn ${q.mode==='word'?'':'secondary'} small" onclick="setQuizMode('word')">RU→汉字</button>
+          </div>
+        </div>
+        ${pool.length<4?`<div class="notice">Мало слов в категории. Выбери другую или добавь слова.</div>`:
+        !w?'':`
+          <div style="padding:24px 16px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:14px;border:1px solid var(--line)">
+            <div class="small-muted" style="text-align:center;margin-bottom:10px">${q.mode==='translation'?'Что означает этот иероглиф?':'Выбери правильный иероглиф:'}</div>
+            ${showQ}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            ${q.options.map(opt=>{
+              const isCorrect=opt.hanzi===w.hanzi;
+              const isAnswered=q.answered===opt.hanzi;
+              let style='';
+              let extra='';
+              if(q.answered!==null){
+                if(isCorrect){style='background:var(--green-soft);border-color:var(--green);border-width:2px';extra='✓ ';}
+                else if(isAnswered){style='background:#fef2f2;border-color:#dc2626;border-width:2px';extra='✗ ';}
+              }
+              const label=q.mode==='translation'?esc(opt.translation.split(';')[0].trim()):`<span style="font-size:18px;font-weight:900">${esc(opt.hanzi)}</span> <span style="font-size:12px;color:var(--muted)">${esc(opt.pinyin)}</span>`;
+              return `<button onclick="quizAnswer('${esc(opt.hanzi)}')" style="padding:14px 10px;border-radius:var(--radius-sm);border:1.5px solid var(--line);background:var(--card);color:var(--text);cursor:pointer;font:inherit;font-size:14px;font-weight:600;text-align:center;transition:all .15s;${style}">${extra}${label}</button>`;
+            }).join('')}
+          </div>
+          ${q.answered!==null?`<div style="margin-top:14px">
+            <div style="padding:12px 14px;border-radius:var(--radius-sm);font-weight:700;${q.answered===w.hanzi?'background:var(--green-soft);color:var(--green);border:1px solid #a7f3d0':'background:#fef2f2;color:#dc2626;border:1px solid #fecaca'}">
+              ${q.answered===w.hanzi?'✓ Правильно!':'✗ Правильный ответ: '+esc(w.hanzi)+' — '+esc(w.translation)}
+            </div>
+            ${w.example?`<div class="item-card" style="margin-top:10px;font-size:13px"><div style="font-weight:700">${esc(w.example)}</div>${w.examplePinyin?`<div class="pinyin-sm" style="margin-top:4px">${esc(w.examplePinyin)}</div>`:''}<button class="btn secondary small" style="margin-top:8px" onclick="speakChinese(${safeJson(w.example)})">🔊</button></div>`:''}
+            <div class="button-row" style="margin-top:10px"><button class="btn" onclick="quizNext()">Следующий →</button></div>
+          </div>`:''}`}
+      </div>
+      <div class="card">
+        <div class="section-title">Статистика</div>
+        <div class="list">
+          <div class="item-card">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="text-align:center;padding:12px;background:var(--green-soft);border-radius:var(--radius-sm)"><div style="font-size:26px;font-weight:900;color:var(--green)">${q.score}</div><div class="small-muted">Правильно</div></div>
+              <div style="text-align:center;padding:12px;background:#fef2f2;border-radius:var(--radius-sm)"><div style="font-size:26px;font-weight:900;color:#dc2626">${q.total-q.score}</div><div class="small-muted">Ошибки</div></div>
+            </div>
+            <div style="margin-top:10px"><div class="progress"><div class="bar" style="width:${acc}%"></div></div></div>
+          </div>
+          <div class="item-card"><strong>汉字→RU</strong><div class="small-muted" style="margin-top:4px">Видишь иероглиф — выбираешь перевод</div></div>
+          <div class="item-card"><strong>RU→汉字</strong><div class="small-muted" style="margin-top:4px">Видишь перевод — выбираешь иероглиф и пиньинь</div></div>
+          <div class="item-card"><button class="btn secondary small" onclick="(()=>{state.quiz.score=0;state.quiz.total=0;generateQuizQuestion();renderQuiz();})()">Сбросить счёт</button></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── Grammar ────────────────────────────────────────────────────
+function renderGrammar(){
+  const categories=[...new Set(grammarData.map(g=>g.category))];
+  const nav=categories.map(cat=>`
+    <div class="grammar-nav-cat">${cat}</div>
+    ${grammarData.filter(g=>g.category===cat).map(g=>`
+      <button class="grammar-nav-item ${state.activeGrammar===g.id?'active':''}" onclick="setGrammar('${g.id}')">${g.title}</button>
+    `).join('')}
+  `).join('');
+  const content=grammarData.map(g=>`
+    <div class="grammar-content ${state.activeGrammar===g.id?'active':''}">${g.content}</div>
+  `).join('');
+
+  document.getElementById('grammar').innerHTML=`
+    <div class="grammar-grid">
+      <div class="card" style="padding:12px"><div class="grammar-nav">${nav}</div></div>
+      <div class="card">
+        <div class="section-title">${grammarData.find(g=>g.id===state.activeGrammar)?.title||''}</div>
+        ${content}
+      </div>
+    </div>`;
+}
+function setGrammar(id){ state.activeGrammar=id; renderGrammar(); }
+
+// ── Phrases ────────────────────────────────────────────────────
+function renderPhrases(){
+  const cat=phrases[state.activePhrasesCat]||phrases[0];
+  document.getElementById('phrases').innerHTML=`
+    <div class="grid-2">
+      <div class="card" style="padding:14px">
+        <div class="section-title" style="margin-bottom:12px">Категории</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${phrases.map((p,i)=>`
+            <button onclick="setPhraseCat(${i})" style="text-align:left;padding:10px 12px;border-radius:var(--radius-xs);border:1px solid ${i===state.activePhrasesCat?'var(--primary)':'var(--line)'};background:${i===state.activePhrasesCat?'var(--primary-soft)':'transparent'};cursor:pointer;font:inherit;font-size:13px;font-weight:700;color:${i===state.activePhrasesCat?'var(--primary-text)':'var(--text)'}">
+              ${esc(p.cat)}
+            </button>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">${esc(cat.cat)}</div>
+        <div class="list">
+          ${cat.items.map(p=>`
+            <div class="item-card">
+              <div style="font-size:18px;font-weight:800;cursor:pointer;color:var(--primary)" onclick="speakChinese('${esc(p.ch)}')">${esc(p.ch)}</div>
+              <div class="pinyin-sm" style="margin-top:6px">${esc(p.py)}</div>
+              <div class="small-muted" style="margin-top:4px">${esc(p.ru)}</div>
+              <div class="button-row">
+                <button class="btn secondary small" onclick="speakChinese(${safeJson(p.ch)})">🔊 Озвучить</button>
+              </div>
+            </div>`).join('')}
+        </div>
+        <div class="notice" style="margin-top:14px">💡 Произноси каждую фразу вслух 5 раз после прослушивания — это shadowing, самый быстрый метод для разговорного китайского.</div>
+      </div>
+    </div>`;
+}
+function setPhraseCat(i){ state.activePhrasesCat=i; renderPhrases(); }
+
+// ── Measure words ──────────────────────────────────────────────
+function renderMeasure(){
+  document.getElementById('measure').innerHTML=`
+    <div class="card" style="margin-bottom:16px">
+      <div class="section-title">量词 — Счётные слова</div>
+      <div class="notice gold">💡 В китайском нельзя сказать «одна книга» — нужно: 一 + 量词 + существительное. Это как «один лист бумаги» или «одна голова скота» в русском, только обязательно для всех существительных.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+      ${measureWords.map(m=>`
+        <div class="card">
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px">
+            <div class="hanzi" style="cursor:pointer" onclick="speakChinese('${esc(m.mw)}')">${esc(m.mw)}</div>
+            <div>
+              <div class="pinyin">${esc(m.pinyin)}</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(m.usage)}</div>
+            </div>
+          </div>
+          <div style="font-size:13px;line-height:1.8;color:var(--text)">${esc(m.examples)}</div>
+          <button class="btn secondary small" style="margin-top:10px" onclick="speakChinese('${esc(m.mw)}')">🔊 Послушать</button>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ── Init ───────────────────────────────────────────────────────
+function renderAll(){
+  renderTabs();
+  renderDashboard();
+  renderTones();
+  renderDictionary();
+  renderReview();
+  generateQuizQuestion();
+  renderQuiz();
+  renderGrammar();
+  renderPhrases();
+  renderMeasure();
+  const saved=localStorage.getItem('zh_theme')||'light';
+  const btn=document.getElementById('theme-btn');
+  if(btn) btn.textContent=saved==='dark'?'☀️ Светлая':'🌙 Тёмная';
+}
+if('speechSynthesis' in window){ window.speechSynthesis.onvoiceschanged=()=>{}; }
+renderAll();
+</script>
+</body>
+</html>
