@@ -545,14 +545,51 @@ function streakCount(){
   return streak;
 }
 
+// Android requires waiting for voices to load asynchronously
+let zhVoicesReady = false;
+let zhVoicesList = [];
+function loadVoices(){
+  const voices = window.speechSynthesis.getVoices() || [];
+  if(voices.length > 0){
+    zhVoicesList = voices;
+    zhVoicesReady = true;
+  }
+}
+if('speechSynthesis' in window){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = function(){
+    loadVoices();
+  };
+}
+function getBestChineseVoice(){
+  const voices = zhVoicesList.length ? zhVoicesList : (window.speechSynthesis.getVoices()||[]);
+  return voices.find(v=>/zh[-_]?(CN|TW|HK)/i.test(v.lang))
+      || voices.find(v=>/^zh/i.test(v.lang))
+      || voices.find(v=>/chinese|mandarin/i.test(v.name))
+      || null;
+}
 function speakChinese(text){
   if(!text||!('speechSynthesis' in window)) return;
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='zh-CN'; u.rate=0.8;
-  const voices=window.speechSynthesis.getVoices()||[];
-  const v=voices.find(v=>/zh[-_]?CN/i.test(v.lang))||voices.find(v=>/^zh/i.test(v.lang))||null;
-  if(v) u.voice=v;
-  try{ window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch(e){}
+  // Android Chrome: if voices not ready, wait and retry
+  if(!zhVoicesReady && window.speechSynthesis.getVoices().length === 0){
+    setTimeout(function(){ speakChinese(text); }, 300);
+    return;
+  }
+  try{
+    window.speechSynthesis.cancel();
+    setTimeout(function(){
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = 0.8;
+      u.pitch = 1.0;
+      u.volume = 1.0;
+      const v = getBestChineseVoice();
+      if(v) u.voice = v;
+      window.speechSynthesis.speak(u);
+    }, 50);
+  }catch(e){
+    console.warn('Speech error:', e);
+  }
 }
 
 function persist(){
@@ -1487,7 +1524,7 @@ function renderAll(){
   const btn=document.getElementById('theme-btn');
   if(btn) btn.textContent=saved==='dark'?'☀️ Светлая':'🌙 Тёмная';
 }
-if('speechSynthesis' in window){ window.speechSynthesis.onvoiceschanged=()=>{}; }
+// voices init handled above
 renderAll();
 </script>
 </body>
