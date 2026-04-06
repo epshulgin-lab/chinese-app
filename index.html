@@ -545,34 +545,89 @@ function streakCount(){
   return streak;
 }
 
-// TTS using Google Translate audio API — works on all devices including Android
+// TTS — optimised for Yandex Browser on Android Xiaomi
+let _ttsVoices = [];
+let _ttsReady = false;
+
+function _initTTS(){
+  if(!('speechSynthesis' in window)) return;
+  function load(){
+    const v = window.speechSynthesis.getVoices();
+    if(v && v.length){ _ttsVoices = v; _ttsReady = true; }
+  }
+  load();
+  window.speechSynthesis.onvoiceschanged = load;
+  // Яндекс Браузер иногда требует явного вызова после задержки
+  setTimeout(load, 500);
+  setTimeout(load, 1500);
+}
+_initTTS();
+
 function speakChinese(text){
   if(!text) return;
-  try{
-    // Use Google Translate TTS — reliable on all platforms
-    const encoded = encodeURIComponent(text);
-    const url = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encoded + '&tl=zh-CN&client=tw-ob';
-    const audio = new Audio(url);
-    audio.play().catch(function(e){
-      // Fallback to Web Speech API if Audio fails
-      speakWebSpeech(text);
-    });
-  } catch(e){
-    speakWebSpeech(text);
+
+  // Метод 1: Web Speech API с китайским голосом
+  if('speechSynthesis' in window){
+    const voices = _ttsVoices.length
+      ? _ttsVoices
+      : window.speechSynthesis.getVoices() || [];
+
+    const zhVoice = voices.find(v => /zh[-_]?CN/i.test(v.lang))
+                 || voices.find(v => /^zh/i.test(v.lang))
+                 || voices.find(v => /chinese|mandarin/i.test(v.name));
+
+    if(zhVoice || voices.length === 0){
+      // Есть китайский голос ИЛИ голоса ещё не загружены — пробуем
+      window.speechSynthesis.cancel();
+      setTimeout(function(){
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'zh-CN';
+        u.rate = 0.85;
+        u.volume = 1.0;
+        u.pitch = 1.0;
+        if(zhVoice){
+          u.voice = zhVoice;
+          u.lang = zhVoice.lang; // важно для Яндекс!
+        }
+        window.speechSynthesis.speak(u);
+      }, 100);
+      return;
+    }
   }
+
+  // Метод 2: Google Translate TTS через аудио-тег
+  _speakViaAudio(text);
 }
-function speakWebSpeech(text){
-  if(!('speechSynthesis' in window)) return;
+
+function _speakViaAudio(text){
   try{
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN';
-    u.rate = 0.8;
-    const voices = window.speechSynthesis.getVoices() || [];
-    const v = voices.find(v=>/zh/i.test(v.lang)) || null;
-    if(v) u.voice = v;
-    window.speechSynthesis.speak(u);
-  } catch(e){}
+    const src = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=' + encodeURIComponent(text);
+    const a = new Audio();
+    a.src = src;
+    a.volume = 1.0;
+    const p = a.play();
+    if(p && typeof p.catch === 'function'){
+      p.catch(function(){
+        // Метод 3: показать текст пиньиня как подсказку
+        _showPinyinHint(text);
+      });
+    }
+  } catch(e){ _showPinyinHint(text); }
+}
+
+function _showPinyinHint(text){
+  // Если озвучка не работает — показываем toast с подсказкой
+  let toast = document.getElementById('tts-toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'tts-toast';
+    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90vw;text-align:center';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = '🔊 Озвучка: ' + text + ' — для звука нужен китайский голос в системе';
+  toast.style.opacity = '1';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(function(){ toast.style.opacity = '0'; }, 3000);
 }
 
 function persist(){
